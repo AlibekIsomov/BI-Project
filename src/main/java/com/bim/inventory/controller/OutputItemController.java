@@ -7,12 +7,13 @@ import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.InputItemService;
 import com.bim.inventory.service.OutputItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 @RestController
-@RequestMapping("/outputitem")
+@RequestMapping("/api/outputitem")
 public class OutputItemController {
     @Autowired
     OutputItemService itemService;
@@ -38,4 +39,18 @@ public class OutputItemController {
     public double getTotalPrice() {
         return itemService.getTotalPrice();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        if(itemService.delete(id)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id){
+        return ResponseEntity.ok(itemService.getById(id));
+    }
+
 }

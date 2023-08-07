@@ -1,8 +1,13 @@
 package com.bim.inventory.service.Impl;
 
 import com.bim.inventory.entity.InputItem;
+import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.InputItemRepository;
+import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.InputItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -10,11 +15,9 @@ import java.util.List;
 
 @Service
 public class InputItemServiceImpl implements InputItemService {
-    private final InputItemRepository itemRepository;
-
-    public InputItemServiceImpl(InputItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(InputItemServiceImpl.class);
+    @Autowired
+    InputItemRepository itemRepository;
 
     @Override
     public InputItem addItem(InputItem item) {
@@ -27,6 +30,13 @@ public class InputItemServiceImpl implements InputItemService {
         return itemRepository.findAll();
 
     }
+
+    @Override
+    public InputItem update(InputItem item) {
+        item.setCreatedAt(LocalDateTime.now());
+        return itemRepository.save(item);
+    }
+
     public List<InputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate) {
         return itemRepository.findByCreatedAtBetween(fromDate, toDate);
     }
@@ -44,6 +54,27 @@ public class InputItemServiceImpl implements InputItemService {
             totalPrice += item.getPrice() * item.getCount();
         }
         return totalPrice;
+    }
+
+
+    @Override
+    public boolean delete(Long id) {
+        InputItem item = getById(id);
+        if (item == null) {
+            LOG.error("Failed to delete entity with ID '{}' as it does not exist", id);
+            return false;
+        }
+        try {
+            itemRepository.delete(item);
+            return true;
+        } catch (final Exception e) {
+            LOG.error(e.getMessage(), e);
+            return false;
+        }
+    }
+    @Override
+    public InputItem getById(Long id) {
+        return itemRepository.findById(id).orElse(null);
     }
 
 

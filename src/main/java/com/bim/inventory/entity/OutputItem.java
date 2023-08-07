@@ -25,7 +25,7 @@ public class OutputItem {
 
     @Column(nullable = false)
     private int count;
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
 
@@ -33,4 +33,5 @@ public class OutputItem {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
+
 }
