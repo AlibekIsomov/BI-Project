@@ -1,29 +1,63 @@
 package com.bim.inventory.service.Impl;
 
+import com.bim.inventory.dto.InputDTO;
 import com.bim.inventory.entity.InputItem;
-import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.InputItemRepository;
-import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.InputItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InputItemServiceImpl implements InputItemService {
-    private static final Logger LOG = LoggerFactory.getLogger(InputItemServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(InputItemServiceImpl.class);
     @Autowired
     InputItemRepository itemRepository;
 
     @Override
-    public InputItem addItem(InputItem item) {
-        // Additional validation and error handling can be added here
-        return itemRepository.save(item);
+    public Page<InputItem> getAll(Pageable pageable) throws Exception {
+        return itemRepository.findAll(pageable);
     }
+
+    @Override
+    public Optional<InputItem> getById(Long id) throws Exception {
+        if(!itemRepository.existsById(id)) {
+            logger.info("Car with id " + id + " does not exists");
+            return Optional.empty();
+        }
+        return itemRepository.findById(id);
+    }
+
+    @Override
+    public Optional<InputItem> create(InputItem data) throws Exception {
+        return Optional.of(itemRepository.save(data));
+    }
+
+    @Override
+    public Optional<InputItem> update(InputItem data) throws Exception {
+        if(itemRepository.existsById(data.getId())) {
+            logger.info("Car with id " + data.getId() + " does not exists");
+            return Optional.empty();
+        }
+        return Optional.of(itemRepository.save(data));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if(!itemRepository.existsById(id)) {
+            logger.info("Car with id " + id + " does not exists");
+        }
+        itemRepository.deleteById(id);
+    }
+
+
 
     @Override
     public List<InputItem> getAllItems() {
@@ -31,14 +65,15 @@ public class InputItemServiceImpl implements InputItemService {
 
     }
 
-    @Override
-    public InputItem update(InputItem item) {
-        item.setCreatedAt(LocalDateTime.now());
-        return itemRepository.save(item);
-    }
-
     public List<InputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate) {
         return itemRepository.findByCreatedAtBetween(fromDate, toDate);
+    }
+
+    @Override
+    public Page<InputDTO> getAllDTO(Pageable pageable) {
+        Page<InputItem> inputItems = itemRepository.findAll(pageable);
+        Page<InputDTO> inputDTOPage = inputItems.map(InputDTO::new);
+        return inputDTOPage;
     }
 
     @Override
@@ -55,31 +90,5 @@ public class InputItemServiceImpl implements InputItemService {
         }
         return totalPrice;
     }
-
-
-    @Override
-    public boolean delete(Long id) {
-        InputItem item = getById(id);
-        if (item == null) {
-            LOG.error("Failed to delete entity with ID '{}' as it does not exist", id);
-            return false;
-        }
-        try {
-            itemRepository.delete(item);
-            return true;
-        } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
-            return false;
-        }
-    }
-    @Override
-    public InputItem getById(Long id) {
-        return itemRepository.findById(id).orElse(null);
-    }
-
-
-
-
-
 
 }

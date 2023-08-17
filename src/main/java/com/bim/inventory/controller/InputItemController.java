@@ -4,6 +4,8 @@ import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.repository.InputItemRepository;
 import com.bim.inventory.service.InputItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/inputitem")
-public class InputItemController {
+public class InputItemController  implements CommonController<InputItem,Long> {
     @Autowired
     InputItemService itemService;
     @Autowired
     InputItemRepository inputItemRepository;
-
-    @PostMapping
-    public InputItem addItem(@RequestBody InputItem item) {
-        return itemService.addItem(item);
-    }
-
-    @GetMapping
-    public List<InputItem> getAllItems() {
-    return itemService.getAllItems();
-    }
 
     @GetMapping("/created-between")
     public List<InputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate) {
@@ -38,18 +30,28 @@ public class InputItemController {
         return itemService.getTotalPrice();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id){
-        if(itemService.delete(id)){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.badRequest().build();
+    @Override
+    public ResponseEntity<Page<InputItem>> getAll(Pageable pageable) throws Exception {
+        return null;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
-        return ResponseEntity.ok(itemService.getById(id));
+    @Override
+    public ResponseEntity<InputItem> getById(Long id) throws Exception {
+        return null;
     }
 
+    @Override
+    public ResponseEntity<InputItem> create(InputItem data) throws Exception {
+        return null;
+    }
 
+    @Override
+    public ResponseEntity<InputItem> update(InputItem data) throws Exception {
+        return null;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
 }

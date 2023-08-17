@@ -1,4 +1,9 @@
 package com.bim.inventory.service;
 
-public interface CategoryService {
+import com.bim.inventory.entity.Category;
+
+
+public interface CategoryService extends CommonService<Category, Long> {
+    public boolean delete(Long id);
+
 }

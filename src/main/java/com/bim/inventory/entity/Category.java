@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @AllArgsConstructor
@@ -19,5 +20,8 @@ public class Category {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
 }
