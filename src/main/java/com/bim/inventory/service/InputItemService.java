@@ -6,7 +6,6 @@ import com.bim.inventory.entity.OutputItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.List;
 public interface InputItemService  extends CommonService<InputItem, Long>  {

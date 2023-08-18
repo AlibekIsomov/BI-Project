@@ -33,7 +33,7 @@ public class OutputItemServiceImpl implements OutputItemService {
     @Override
     public Optional<OutputItem> getById(Long id) throws Exception {
         if(!itemRepository.existsById(id)) {
-            logger.info("Car with id " + id + " does not exists");
+            logger.info("OutputItem with id " + id + " does not exists");
             return Optional.empty();
         }
         return itemRepository.findById(id);
@@ -47,7 +47,7 @@ public class OutputItemServiceImpl implements OutputItemService {
     @Override
     public Optional<OutputItem> update(OutputItem data) throws Exception {
         if(!itemRepository.existsById(data.getId())) {
-            logger.info("Car with id " + data.getId() + " does not exists");
+            logger.info("OutputItem with id " + data.getId() + " does not exists");
             return Optional.empty();
         }
         return Optional.of(itemRepository.save(data));
@@ -56,7 +56,7 @@ public class OutputItemServiceImpl implements OutputItemService {
     @Override
     public void deleteById(Long id) {
         if(!itemRepository.existsById(id)) {
-            logger.info("Car with id " + id + " does not exists");
+            logger.info("OutputItem with id " + id + " does not exists");
         }
         itemRepository  .deleteById(id);
     }

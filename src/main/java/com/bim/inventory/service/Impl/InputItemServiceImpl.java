@@ -29,7 +29,7 @@ public class InputItemServiceImpl implements InputItemService {
     @Override
     public Optional<InputItem> getById(Long id) throws Exception {
         if(!itemRepository.existsById(id)) {
-            logger.info("Car with id " + id + " does not exists");
+            logger.info("Input with id " + id + " does not exists");
             return Optional.empty();
         }
         return itemRepository.findById(id);
@@ -43,7 +43,7 @@ public class InputItemServiceImpl implements InputItemService {
     @Override
     public Optional<InputItem> update(InputItem data) throws Exception {
         if(itemRepository.existsById(data.getId())) {
-            logger.info("Car with id " + data.getId() + " does not exists");
+            logger.info("Input with id " + data.getId() + " does not exists");
             return Optional.empty();
         }
         return Optional.of(itemRepository.save(data));
@@ -52,7 +52,7 @@ public class InputItemServiceImpl implements InputItemService {
     @Override
     public void deleteById(Long id) {
         if(!itemRepository.existsById(id)) {
-            logger.info("Car with id " + id + " does not exists");
+            logger.info("Input with id " + id + " does not exists");
         }
         itemRepository.deleteById(id);
     }
