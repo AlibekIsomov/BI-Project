@@ -12,6 +12,9 @@ import java.util.List;
 
 @Repository
 public interface InputItemRepository extends JpaRepository<InputItem, Long> {
+
+    Page<InputItem> findAllByNameContains(String name, Pageable pageable);
+
     public Page<InputItem> findAllByOrderByIdDesc(Pageable pageable);
 
     List<InputItem> findByCreatedAtBetween(LocalDateTime fromDate, LocalDateTime toDate);

@@ -9,8 +9,16 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
-public interface OutputItemService extends CommonService<OutputItem, Long> {
+public interface OutputItemService  {
+
+    Page<OutputDTO> getAll(Pageable pageable) throws Exception;
+    Optional<OutputDTO> getById(Long id) throws Exception;
+    Optional<OutputDTO> create(OutputItem data) throws Exception;
+    Optional<OutputDTO> update(OutputItem data) throws Exception;
+    void deleteById(Long id);
+    Page<OutputItem> getAllByNameContains(String name,Pageable pageable);
     List<OutputItem> getAllItems();
     double getTotalPrice();
 

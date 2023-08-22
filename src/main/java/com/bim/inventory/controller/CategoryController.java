@@ -1,11 +1,8 @@
 package com.bim.inventory.controller;
 
-
 import com.bim.inventory.entity.Category;
-import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.service.CategoryService;
-import com.bim.inventory.service.Impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,4 +48,9 @@ public class CategoryController implements CommonController<Category,Long> {
         categoryService.deleteById(id);
     }
 
-}
+    @GetMapping("/search-name/{name}")
+    public ResponseEntity<Page<Category>> searchName(@PathVariable String name, Pageable pageble) {
+        return ResponseEntity.ok(categoryService.getAllByNameContains(name,pageble));
+        }
+    }
+

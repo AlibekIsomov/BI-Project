@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     public Page<Category> findAllByOrderByIdDesc(Pageable pageable);
+    Page<Category> findAllByNameContains(String name, Pageable pageable);
 }

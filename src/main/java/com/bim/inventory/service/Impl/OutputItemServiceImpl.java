@@ -1,8 +1,6 @@
 package com.bim.inventory.service.Impl;
 
-import com.bim.inventory.dto.InputDTO;
 import com.bim.inventory.dto.OutputDTO;
-import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.OutputItemService;
@@ -26,31 +24,31 @@ public class OutputItemServiceImpl implements OutputItemService {
     @Autowired
     OutputItemRepository itemRepository;
     @Override
-    public Page<OutputItem> getAll(Pageable pageable) throws Exception {
-        return itemRepository.findAll(pageable);
+    public Page<OutputDTO> getAll(Pageable pageable) throws Exception {
+        return itemRepository.findAll(pageable).map(OutputDTO::new);
     }
 
     @Override
-    public Optional<OutputItem> getById(Long id) throws Exception {
+    public Optional<OutputDTO> getById(Long id) throws Exception {
         if(!itemRepository.existsById(id)) {
             logger.info("OutputItem with id " + id + " does not exists");
             return Optional.empty();
         }
-        return itemRepository.findById(id);
+        return itemRepository.findById(id).map(OutputDTO::new);
     }
 
     @Override
-    public Optional<OutputItem> create(OutputItem data) throws Exception {
-        return Optional.of(itemRepository.save(data));
+    public Optional<OutputDTO> create(OutputItem data) throws Exception {
+        return Optional.of(itemRepository.save(data)).map(OutputDTO::new);
     }
 
     @Override
-    public Optional<OutputItem> update(OutputItem data) throws Exception {
+    public Optional<OutputDTO> update(OutputItem data) throws Exception {
         if(!itemRepository.existsById(data.getId())) {
             logger.info("OutputItem with id " + data.getId() + " does not exists");
             return Optional.empty();
         }
-        return Optional.of(itemRepository.save(data));
+        return Optional.of(itemRepository.save(data)).map(OutputDTO::new);
     }
 
     @Override
@@ -68,6 +66,11 @@ public class OutputItemServiceImpl implements OutputItemService {
     @Override
     public List<OutputItem> getItemsCreatedAfter(LocalDateTime fromDate) {
         return itemRepository.findByCreatedAtAfter(fromDate);
+    }
+
+    @Override
+    public Page<OutputItem> getAllByNameContains(String name, Pageable pageable) {
+        return  itemRepository.findAllByNameContains(name, pageable);
     }
 
     @Override

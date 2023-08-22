@@ -1,6 +1,5 @@
 package com.bim.inventory.repository;
 
-import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +11,8 @@ import java.util.List;
 
 @Repository
 public interface OutputItemRepository extends JpaRepository<OutputItem, Long> {
+
+    Page<OutputItem> findAllByNameContains(String name, Pageable pageable);
     public Page<OutputItem> findAllByOrderByIdDesc(Pageable pageable);
 
     List<OutputItem> findByCreatedAtBetween(LocalDateTime fromDate, LocalDateTime toDate);

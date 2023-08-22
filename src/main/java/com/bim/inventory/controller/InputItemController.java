@@ -1,7 +1,7 @@
 package com.bim.inventory.controller;
 
+import com.bim.inventory.dto.InputDTO;
 import com.bim.inventory.entity.InputItem;
-import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.InputItemRepository;
 import com.bim.inventory.service.InputItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,36 +15,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/inputitem")
-public class InputItemController  implements CommonController<InputItem,Long> {
+public class InputItemController   {
     @Autowired
     InputItemService itemService;
     @Autowired
     InputItemRepository inputItemRepository;
 
-    @Override
     @GetMapping
-    public ResponseEntity<Page<InputItem>> getAll(Pageable pageable) throws Exception {
+    public ResponseEntity<Page<InputDTO>> getAll(Pageable pageable) throws Exception {
         return ResponseEntity.ok(itemService.getAll(pageable));
     }
-    @Override
+
     @GetMapping("/{id}")
-    public ResponseEntity<InputItem> getById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<InputDTO> getById(@PathVariable Long id) throws Exception {
         return itemService.getById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Override
     @PostMapping
-    public ResponseEntity<InputItem> create(@RequestBody InputItem data) throws Exception {
+    public ResponseEntity<InputDTO> create(@RequestBody InputItem data) throws Exception {
         return itemService.create(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Override
     @PutMapping
-    public ResponseEntity<InputItem> update(@RequestBody InputItem data) throws Exception {
+    public ResponseEntity<InputDTO> update(@RequestBody InputItem data) throws Exception {
         return itemService.update(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Override
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         itemService.deleteById(id);
@@ -60,5 +56,8 @@ public class InputItemController  implements CommonController<InputItem,Long> {
         return itemService.getTotalPrice();
     }
 
-
+    @GetMapping("/search-name/{name}")
+    public ResponseEntity<Page<InputItem>> searchName(@PathVariable String name, Pageable pageable){
+        return ResponseEntity.ok(inputItemRepository.findAllByNameContains(name, pageable));
+    }
 }

@@ -1,9 +1,6 @@
 package com.bim.inventory.dto;
-import com.bim.inventory.entity.Category;
-import com.bim.inventory.entity.InputItem;
-import com.bim.inventory.entity.OutputItem;
 
-import javax.persistence.ManyToOne;
+import com.bim.inventory.entity.InputItem;
 import java.time.LocalDate;
 
 public class InputDTO {
@@ -12,8 +9,7 @@ public class InputDTO {
 
     private String name;
 
-    @ManyToOne
-    private Category category;
+    private Long categoryId;
 
     private double price;
 
@@ -29,6 +25,7 @@ public class InputDTO {
     public InputDTO(InputItem inputItem) {
         this.id = id;
         this.name = name;
+        this.categoryId = categoryId;
         this.price = price;
         this.count = count;
         this.description = description;
@@ -51,6 +48,14 @@ public class InputDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public double getPrice() {

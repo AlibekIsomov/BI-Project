@@ -22,31 +22,31 @@ public class InputItemServiceImpl implements InputItemService {
     InputItemRepository itemRepository;
 
     @Override
-    public Page<InputItem> getAll(Pageable pageable) throws Exception {
-        return itemRepository.findAll(pageable);
+    public Page<InputDTO> getAll(Pageable pageable) throws Exception {
+        return itemRepository.findAll(pageable).map(InputDTO::new);
     }
 
     @Override
-    public Optional<InputItem> getById(Long id) throws Exception {
+    public Optional<InputDTO> getById(Long id) throws Exception {
         if(!itemRepository.existsById(id)) {
             logger.info("Input with id " + id + " does not exists");
             return Optional.empty();
         }
-        return itemRepository.findById(id);
+        return itemRepository.findById(id).map(InputDTO::new);
     }
 
     @Override
-    public Optional<InputItem> create(InputItem data) throws Exception {
-        return Optional.of(itemRepository.save(data));
+    public Optional<InputDTO> create(InputItem data) throws Exception {
+        return Optional.of(itemRepository.save(data)).map(InputDTO::new);
     }
 
     @Override
-    public Optional<InputItem> update(InputItem data) throws Exception {
+    public Optional<InputDTO> update(InputItem data) throws Exception {
         if(itemRepository.existsById(data.getId())) {
             logger.info("Input with id " + data.getId() + " does not exists");
             return Optional.empty();
         }
-        return Optional.of(itemRepository.save(data));
+        return Optional.of(itemRepository.save(data)).map(InputDTO::new);
     }
 
     @Override
@@ -58,6 +58,10 @@ public class InputItemServiceImpl implements InputItemService {
     }
 
 
+    @Override
+    public Page<InputItem> getAllByNameContains(String name, Pageable pageable) {
+        return itemRepository.findAllByNameContains(name, pageable);
+    }
 
     @Override
     public List<InputItem> getAllItems() {

@@ -26,15 +26,15 @@ public class SwaggerConfig {
 
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
-                .title("Tech Interface - Spring Boot Swagger Configuration")
+                .title("Spring Boot Swagger Configuration")
                 .description("\"Swagger configuration for application \"")
                 .version("1.1.0")
                 .license("Apache 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
-                .contact(new Contact("Tech Interface", "https://www.youtube.com/channel/UCMpJ8m1w9t7EFcF9x8rs02A", "info@techinterface.com"))
+                .contact(new Contact("Isomov Alibek", "t.me/IA_developer", "aisomov.dev@gmail.com"))
                 .build();
     }
     //for Swagger api doc generation
-    //http://localhost:8091/v2/api-docs
+    //http://localhost:8082/v2/api-docs
 }
 
