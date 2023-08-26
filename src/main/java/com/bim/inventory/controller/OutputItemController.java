@@ -30,7 +30,6 @@ public class OutputItemController  {
         return itemService.getById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     @PostMapping
     public ResponseEntity<OutputDTO> create(@RequestBody OutputItem data) throws Exception {
         return itemService.create(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -46,7 +45,6 @@ public class OutputItemController  {
         itemService.deleteById(id);
     }
 
-
     @GetMapping("/created-between")
     public List<OutputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate) {
         return outputItemRepository.findByCreatedAtBetween(fromDate, toDate);
@@ -56,6 +54,7 @@ public class OutputItemController  {
     public double getTotalPrice() {
         return itemService.getTotalPrice();
     }
+    
     @GetMapping("/search-name/{name}")
     public ResponseEntity<Page<OutputItem>> getAllByNameContains(@PathVariable String name, Pageable pageable){
         return ResponseEntity.ok(itemService.getAllByNameContains(name, pageable));
