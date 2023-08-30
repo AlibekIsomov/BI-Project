@@ -17,10 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
-public class OutputItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class OutputItem extends DistributedEntity{
 
     @Column(nullable = false)
     private String name;

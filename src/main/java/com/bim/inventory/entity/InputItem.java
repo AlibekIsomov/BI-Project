@@ -19,10 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
-public class InputItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class InputItem extends DistributedEntity{
 
     @Column(nullable = false)
     private String name;

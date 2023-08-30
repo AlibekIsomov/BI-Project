@@ -17,13 +17,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 @Entity
-public class Inventory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Inventory extends DistributedEntity{
 
     @Column(nullable = false)
     private String name;
+
+    @Lob
+    private byte[] image;
 
     @Column(nullable = false)
     private double price;
