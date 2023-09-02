@@ -22,15 +22,15 @@ public class Inventory extends DistributedEntity{
     @Column(nullable = false)
     private String name;
 
-    @Lob
-    private byte[] image;
+    @OneToOne
+    private Attachment attachment;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private double price;
 
     private String description;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private int count;
 
     @JsonFormat(pattern = "yyyy.MM.dd")
