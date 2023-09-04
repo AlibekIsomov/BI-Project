@@ -1,6 +1,5 @@
 package com.bim.inventory.controller;
 
-import com.bim.inventory.dto.InputDTO;
 import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.repository.InputItemRepository;
 import com.bim.inventory.service.InputItemService;
@@ -22,22 +21,22 @@ public class InputItemController   {
     InputItemRepository inputItemRepository;
 
     @GetMapping
-    public ResponseEntity<Page<InputDTO>> getAll(Pageable pageable) throws Exception {
+    public ResponseEntity<Page<InputItem>> getAll(Pageable pageable) throws Exception {
         return ResponseEntity.ok(itemService.getAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InputDTO> getById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<InputItem> getById(@PathVariable Long id) throws Exception {
         return itemService.getById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<InputDTO> create(@RequestBody InputItem data) throws Exception {
+    public ResponseEntity<InputItem> create(@RequestBody InputItem data) throws Exception {
         return itemService.create(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping
-    public ResponseEntity<InputDTO> update(@RequestBody InputItem data) throws Exception {
+    public ResponseEntity<InputItem> update(@RequestBody InputItem data) throws Exception {
         return itemService.update(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

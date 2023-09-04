@@ -9,6 +9,8 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -38,16 +40,20 @@ public class InputItem extends DistributedEntity{
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @JoinColumn(updatable = false)
+    @CreatedBy
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User createdBy;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+
+
+
+
 }
