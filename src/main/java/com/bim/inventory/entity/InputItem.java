@@ -6,22 +6,27 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-public class InputItem extends DistributedEntity{
+@EntityListeners(AuditingEntityListener.class)
+public class InputItem{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -44,16 +49,11 @@ public class InputItem extends DistributedEntity{
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @JoinColumn(updatable = false)
     @CreatedBy
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User createdBy;
+    private String createdBy;
 
     @CreatedDate
-    private LocalDateTime createdAt;
-
-
-
+    private Instant createdAt;
 
 
 }
