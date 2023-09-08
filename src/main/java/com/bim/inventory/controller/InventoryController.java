@@ -1,11 +1,7 @@
 package com.bim.inventory.controller;
 
-
-import com.bim.inventory.entity.Category;
 import com.bim.inventory.entity.Inventory;
-import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.repository.InventoryRepository;
-import com.bim.inventory.service.CategoryService;
 import com.bim.inventory.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

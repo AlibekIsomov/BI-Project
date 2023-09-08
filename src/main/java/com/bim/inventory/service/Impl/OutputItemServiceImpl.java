@@ -1,6 +1,5 @@
 package com.bim.inventory.service.Impl;
 
-import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.OutputItemService;

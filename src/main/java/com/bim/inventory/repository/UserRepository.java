@@ -1,7 +1,5 @@
 package com.bim.inventory.repository;
 
-
-
 import com.bim.inventory.entity.Role;
 import com.bim.inventory.entity.User;
 import org.springframework.data.domain.Page;

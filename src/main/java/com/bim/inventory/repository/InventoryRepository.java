@@ -1,7 +1,5 @@
 package com.bim.inventory.repository;
 
-
-import com.bim.inventory.entity.Category;
 import com.bim.inventory.entity.Inventory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

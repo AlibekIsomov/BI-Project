@@ -1,8 +1,5 @@
 package com.bim.inventory.security;
 
-
-
-
 import com.bim.inventory.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
