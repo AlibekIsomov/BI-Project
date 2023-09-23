@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -94,6 +93,6 @@ public class InputItemController   {
     public List<InputItem> findItemsByDateRange(
             @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-        return itemService.getItemsCreatedAfter(startDate, endDate);
+        return itemService.findItemsWithinDateRange(startDate, endDate);
     }
 }
