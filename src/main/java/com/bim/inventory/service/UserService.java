@@ -10,11 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface UserService extends CommonServiceDto<User, UserDTO>{
-//    public Optional<User> getByIdEntity(Long id);
-
-//    public List<UserDTO> getAll();
-
-//    UserDTO update(User user);
+//    public Optional<User> getByIdEntity(Long id);1
 
 //    public Optional<UserDTO> getById(Long id);
 

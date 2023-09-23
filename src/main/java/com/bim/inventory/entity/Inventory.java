@@ -34,12 +34,12 @@ public class Inventory {
     @OneToOne
     private Attachment attachment;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private double price;
 
     private String description;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private int count;
 
     @JsonFormat(pattern = "yyyy.MM.dd")

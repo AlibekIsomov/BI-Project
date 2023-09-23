@@ -1,6 +1,11 @@
 package com.bim.inventory.service.Impl;
 
+import com.bim.inventory.dto.InputDTO;
+import com.bim.inventory.dto.OutputDTO;
+import com.bim.inventory.entity.Category;
+import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
+import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.OutputItemService;
 import org.slf4j.Logger;
@@ -22,6 +27,10 @@ public class OutputItemServiceImpl implements OutputItemService {
     private static final Logger logger = LoggerFactory.getLogger(OutputItem.class);
     @Autowired
     OutputItemRepository itemRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Override
     public Page<OutputItem> getAll(Pageable pageable) throws Exception {
         return itemRepository.findAll(pageable);
@@ -37,17 +46,49 @@ public class OutputItemServiceImpl implements OutputItemService {
     }
 
     @Override
-    public Optional<OutputItem> create(OutputItem data) throws Exception {
-        return Optional.of(itemRepository.save(data));
+    public Optional<OutputItem> create(OutputDTO data) throws Exception {
+        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+
+        if (!optionalCategory.isPresent()) {
+            logger.info("Such ID category does not exist!");
+        }
+
+        OutputItem item = new OutputItem();
+        item.setName(data.getName());
+        item.setPrice(data.getPrice());
+        item.setDescription(data.getDescription());
+        item.setCount(data.getCount());
+        item.setCategory(optionalCategory.get());
+
+
+        return Optional.of(itemRepository.save(item));
     }
 
+
     @Override
-    public Optional<OutputItem> update(OutputItem data) throws Exception {
-        if(itemRepository.existsById(data.getId())) {
-            logger.info("Input with id " + data.getId() + " does not exists");
-            return Optional.empty();
+    public Optional<OutputItem> update(Long id, OutputDTO data) throws Exception {
+        Optional<OutputItem> existingItem = itemRepository.findById(id);
+
+        if (!existingItem.isPresent()) {
+            logger.info("Input with id " + id + " does not exist");
+            return null;
         }
-        return Optional.of(itemRepository.save(data));
+
+        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+
+        if (!optionalCategory.isPresent()) {
+            logger.info("Such ID category does not exist!");
+        }
+
+        OutputItem itemToUpdate = existingItem.get();
+
+        itemToUpdate.setName(data.getName());
+        itemToUpdate.setPrice(data.getPrice());
+        itemToUpdate.setDescription(data.getDescription());
+        itemToUpdate.setCount(data.getCount());
+        itemToUpdate.setCategory(optionalCategory.get());
+
+        return Optional.of(itemRepository.save(itemToUpdate));
     }
 
     @Override

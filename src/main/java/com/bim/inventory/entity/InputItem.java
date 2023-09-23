@@ -39,12 +39,6 @@ public class InputItem{
     @Column(nullable = false)
     private int count;
 
-    @JsonFormat(pattern = "yyyy.MM.dd")
-    @DateTimeFormat(pattern = "yyyy.MM.dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate date;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

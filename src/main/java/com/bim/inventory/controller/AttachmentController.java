@@ -5,6 +5,7 @@ import com.bim.inventory.entity.AttachmentContent;
 import com.bim.inventory.repository.AttachmentContentRepo;
 import com.bim.inventory.repository.AttachmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Optional;
 
-
+@Controller
 @RestController
 public class AttachmentController {
     @Autowired

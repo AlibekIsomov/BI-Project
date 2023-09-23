@@ -1,6 +1,7 @@
 package com.bim.inventory.service.Impl;
 
 
+import com.bim.inventory.dto.CategoryDTO;
 import com.bim.inventory.entity.Category;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.service.CategoryService;
@@ -34,18 +35,23 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id);
     }
 
-    @Override
-    public Optional<Category> create(Category data) throws Exception {
-        return Optional.of(categoryRepository.save(data));
-    }
 
     @Override
-    public Optional<Category> update(Category data) throws Exception {
-        if(categoryRepository.existsById(data.getId())) {
-            logger.info("Input with id " + data.getId() + " does not exists");
-            return Optional.empty();
-        }
-        return Optional.of(categoryRepository.save(data));
+    public Optional<Category> create(CategoryDTO data) throws Exception {
+
+        Category category = new Category();
+        category.setName(data.getName());
+
+        return Optional.of(categoryRepository.save(category));
+    }
+    @Override
+    public Optional<Category> update(Long id, CategoryDTO data) throws Exception {
+
+        Category category = new Category();
+
+        category.setName(data.getName());
+
+        return Optional.of(categoryRepository.save(category));
     }
     @Override
     public Page<Category> getAllByNameContains(String name, Pageable pageable) {

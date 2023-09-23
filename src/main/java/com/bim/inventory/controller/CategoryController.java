@@ -1,56 +1,85 @@
 package com.bim.inventory.controller;
 
+import com.bim.inventory.dto.CategoryDTO;
+import com.bim.inventory.dto.WorkerDTO;
 import com.bim.inventory.entity.Category;
+import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.service.CategoryService;
+
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
+@Controller
 @RestController
 @RequestMapping("/api/category")
-@Controller
-public class CategoryController implements CommonController<Category,Long> {
+public class CategoryController  {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
     CategoryService categoryService;
 
-    @Override
     @GetMapping
     public ResponseEntity<Page<Category>> getAll(Pageable pageable) throws Exception {
         return ResponseEntity.ok(categoryService.getAll(pageable));
     }
-    @Override
+
     @GetMapping("/{id}")
     public ResponseEntity<Category> getById(@PathVariable Long id) throws Exception {
         return categoryService.getById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Override
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody Category data) throws Exception {
-        return categoryService.create(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Category> create(@RequestBody CategoryDTO data) throws Exception {
+        try {
+            Optional<Category> createdCategory = categoryService.create(data);
+
+            if(createdCategory.isPresent()){
+                return ResponseEntity.ok(createdCategory.get());
+            }
+            else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @Override
-    @PutMapping
-    public ResponseEntity<Category> update(@RequestBody Category data) throws Exception {
-        return categoryService.update(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> update(@PathVariable Long id,
+                                         @RequestBody CategoryDTO data) throws Exception {
+        try {
+            Optional<Category> createdCategory = categoryService.update(id, data);
 
-    @Override
+            if (createdCategory.isPresent()) {
+                return ResponseEntity.ok(createdCategory.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (NotFoundException categoryNotFoundException) {
+
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
 
     @GetMapping("/search-name/{name}")
-    public ResponseEntity<Page<Category>> searchName(@PathVariable String name, Pageable pageble) {
-        return ResponseEntity.ok(categoryService.getAllByNameContains(name,pageble));
+    public ResponseEntity<Page<Category>> searchName(@PathVariable String name, Pageable pageable) {
+        return ResponseEntity.ok(categoryService.getAllByNameContains(name,pageable));
         }
     }
 

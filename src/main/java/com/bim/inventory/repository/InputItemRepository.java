@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -20,4 +21,7 @@ public interface InputItemRepository extends JpaRepository<InputItem, Long> {
     List<InputItem> findByCreatedAtBetween(LocalDateTime fromDate, LocalDateTime toDate);
 
     List<InputItem> findByCreatedAtAfter(LocalDateTime fromDate);
+
+    List<InputItem> findByCreatedAtBetween(Date startDate, Date endDate);
+
 }

@@ -51,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/account/authenticate").permitAll()
                 .antMatchers("/api/account/register").permitAll()
+                .antMatchers("/api/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-ui.html", "/webjars/**", "/v2/api-docs/**", "/swagger-resources/**").permitAll()
 
 
                 .anyRequest().authenticated()
@@ -66,13 +68,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
 
-        web   .ignoring()
+
+        web.ignoring()
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .antMatchers("/app/**/*.{js,html}")
                 .antMatchers("/i18n/**")
                 .antMatchers("/content/**")
                 .antMatchers("/h2-console/**")
+                .antMatchers("/api/v1/auth/**")
+                .antMatchers("/v3/api-docs/**")
                 .antMatchers("/swagger-ui/**")
+                .antMatchers("/swagger-ui.html")
                 .antMatchers("/test/**")
                 .antMatchers("/*.*"); // #3
     }

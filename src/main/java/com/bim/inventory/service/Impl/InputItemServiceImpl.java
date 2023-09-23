@@ -1,6 +1,9 @@
 package com.bim.inventory.service.Impl;
 
+import com.bim.inventory.dto.InputDTO;
+import com.bim.inventory.entity.Category;
 import com.bim.inventory.entity.InputItem;
+import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.repository.InputItemRepository;
 import com.bim.inventory.service.InputItemService;
 import org.slf4j.Logger;
@@ -11,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +24,9 @@ public class InputItemServiceImpl implements InputItemService {
     @Autowired
     InputItemRepository itemRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Override
     public Page<InputItem> getAll(Pageable pageable) throws Exception {
         return itemRepository.findAll(pageable);
@@ -28,25 +34,56 @@ public class InputItemServiceImpl implements InputItemService {
 
     @Override
     public Optional<InputItem> getById(Long id) throws Exception {
-        if(!itemRepository.existsById(id)) {
+        if (!itemRepository.existsById(id)) {
             logger.info("Input with id " + id + " does not exists");
             return Optional.empty();
         }
         return itemRepository.findById(id);
     }
 
+
     @Override
-    public Optional<InputItem> create(InputItem data) throws Exception {
-        return Optional.of(itemRepository.save(data));
+    public Optional<InputItem> create(InputDTO data) throws Exception {
+        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+
+        if (!optionalCategory.isPresent()) {
+            logger.info("Such ID category does not exist!");
+        }
+
+        InputItem item = new InputItem();
+        item.setName(data.getName());
+        item.setPrice(data.getPrice());
+        item.setDescription(data.getDescription());
+        item.setCount(data.getCount());
+        item.setCategory(optionalCategory.get());
+
+        return Optional.of(itemRepository.save(item));
     }
 
     @Override
-    public Optional<InputItem> update(InputItem data) throws Exception {
-        if(itemRepository.existsById(data.getId())) {
-            logger.info("Input with id " + data.getId() + " does not exists");
-            return Optional.empty();
+    public Optional<InputItem> update(Long id, InputDTO data) throws Exception {
+        Optional<InputItem> existingItem = itemRepository.findById(id);
+
+        if (!existingItem.isPresent()) {
+            logger.info("Input with id " + id + " does not exist");
+            return null;
         }
-        return Optional.of(itemRepository.save(data));
+
+        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+
+        if (!optionalCategory.isPresent()) {
+            logger.info("Such ID category does not exist!");
+        }
+
+        InputItem itemToUpdate = existingItem.get();
+
+        itemToUpdate.setName(data.getName());
+        itemToUpdate.setPrice(data.getPrice());
+        itemToUpdate.setDescription(data.getDescription());
+        itemToUpdate.setCount(data.getCount());
+        itemToUpdate.setCategory(optionalCategory.get());
+
+        return Optional.of(itemRepository.save(itemToUpdate));
     }
 
     @Override
@@ -68,17 +105,11 @@ public class InputItemServiceImpl implements InputItemService {
         return itemRepository.findAll();
 
     }
-
-    public List<InputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate) {
-        return itemRepository.findByCreatedAtBetween(fromDate, toDate);
-    }
-
-
-
     @Override
-    public List<InputItem> getItemsCreatedAfter(LocalDateTime fromDate) {
-        return itemRepository.findByCreatedAtAfter(fromDate);
+    public List<InputItem> findItemsWithinDateRange(Date startDate, Date endDate) {
+        return itemRepository.findByCreatedAtBetween(startDate, endDate);
     }
+
 
     @Override
     public double getTotalPrice() {

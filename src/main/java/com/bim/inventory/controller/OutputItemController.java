@@ -1,16 +1,26 @@
 package com.bim.inventory.controller;
 
+import com.bim.inventory.dto.InputDTO;
+import com.bim.inventory.dto.OutputDTO;
+import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.OutputItemService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
+@Controller
 @RestController
 @RequestMapping("/api/outputitem")
 public class OutputItemController  {
@@ -30,13 +40,39 @@ public class OutputItemController  {
     }
 
     @PostMapping
-    public ResponseEntity<OutputItem> create(@RequestBody OutputItem data) throws Exception {
-        return itemService.create(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<OutputItem> create(@RequestBody OutputDTO data) {
+        try {
+            Optional <OutputItem> createditem = itemService.create(data);
+
+            if(createditem.isPresent()){
+                return ResponseEntity.ok(createditem.get());
+            }
+            else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @PutMapping
-    public ResponseEntity<OutputItem> update(@RequestBody OutputItem data) throws Exception {
-        return itemService.update(data).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @PutMapping("/{id}")
+    public ResponseEntity<OutputItem> update(@PathVariable Long id,
+                                            @RequestBody OutputDTO data) {
+        try {
+            Optional <OutputItem> updatedItem = itemService.update(id, data);
+
+            if (updatedItem.isPresent()) {
+                return ResponseEntity.ok(updatedItem.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (NotFoundException outputNotFoundException) {
+            // Handle category not found exception, e.g., return a bad request response
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            // Handle other exceptions, e.g., log the error and return an internal server error response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/{id}")

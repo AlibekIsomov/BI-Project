@@ -1,6 +1,9 @@
 package com.bim.inventory.service.Impl;
 
+import com.bim.inventory.dto.InventoryDTO;
+import com.bim.inventory.entity.Attachment;
 import com.bim.inventory.entity.Inventory;
+import com.bim.inventory.repository.AttachmentRepo;
 import com.bim.inventory.repository.InventoryRepository;
 import com.bim.inventory.service.InventoryService;
 import org.slf4j.Logger;
@@ -18,6 +21,8 @@ public class InventoryServiceImpl implements InventoryService {
     private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Autowired
     InventoryRepository inventoryRepository;
+    @Autowired
+    AttachmentRepo attachmentRepo;
 
     @Override
     public Page<Inventory> getAll(Pageable pageable) throws Exception {
@@ -26,7 +31,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public Optional<Inventory> getById(Long id) throws Exception {
-        if(!inventoryRepository.existsById(id)) {
+        if (!inventoryRepository.existsById(id)) {
             logger.info("Input with id " + id + " does not exists");
             return Optional.empty();
         }
@@ -34,28 +39,57 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public Optional<Inventory> create(Inventory data) throws Exception {
-        return Optional.of(inventoryRepository.save(data));
-    }
+    public Optional<Inventory> create(InventoryDTO data) throws Exception {
 
-    @Override
-    public Optional<Inventory> update(Inventory data) throws Exception {
-        if(inventoryRepository.existsById(data.getId())) {
-            logger.info("Input with id " + data.getId() + " does not exists");
-            return Optional.empty();
+        Optional<Attachment> optionalAttachment = attachmentRepo.findById(data.getAttachmentId());
+        if (!optionalAttachment.isPresent()) {
+            logger.info("Such ID category does not exist!");
         }
-        return Optional.of(inventoryRepository.save(data));
+
+        Inventory inventory = new Inventory();
+        inventory.setName(data.getName());
+        inventory.setPrice(data.getPrice());
+        inventory.setDescription(data.getDescription());
+        inventory.setCount(data.getCount());
+        inventory.setAttachment(optionalAttachment.get());
+
+        return Optional.of(inventoryRepository.save(inventory));
+    }
+    @Override
+    public Optional<Inventory> update(Long id, InventoryDTO data) throws Exception {
+        Optional<Inventory> existingInventory = inventoryRepository.findById(id);
+        Optional<Attachment> optionalAttachment = attachmentRepo.findById(data.getAttachmentId());
+        if (!existingInventory.isPresent()) {
+            logger.info("Inventory with id " + id + " does not exist");
+            return null;
+        }
+        Inventory inventoryUpdate = existingInventory.get();
+
+
+        inventoryUpdate.setName(data.getName());
+        inventoryUpdate.setPrice(data.getPrice());
+        inventoryUpdate.setDescription(data.getDescription());
+        inventoryUpdate.setCount(data.getCount());
+        inventoryUpdate.setAttachment(optionalAttachment.get());
+
+        return Optional.of(inventoryRepository.save(inventoryUpdate));
     }
     @Override
     public Page<Inventory> getAllByNameContains(String name, Pageable pageable) {
-        return inventoryRepository.findAllByNameContains(name,pageable);
+        return inventoryRepository.findAllByNameContains(name, pageable);
     }
 
     @Override
     public void deleteById(Long id) {
-        if(!inventoryRepository.existsById(id)) {
+        if (!inventoryRepository.existsById(id)) {
             logger.info("Input with id " + id + " does not exists");
         }
         inventoryRepository.deleteById(id);
     }
-}
+
+
+
+    }
+
+
+

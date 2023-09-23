@@ -14,8 +14,6 @@ public abstract class DistributedEntity {
 //    @JsonSerialize(using = LocalDateTimeSerializer.class)
 //    private LocalDateTime modified;
 //    private LocalDateTime created;
-
-
     private LocalDateTime modified;
 
     private LocalDateTime created;

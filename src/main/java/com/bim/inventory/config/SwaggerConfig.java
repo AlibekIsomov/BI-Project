@@ -11,6 +11,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Collections;
+
 
 @Configuration
 @EnableSwagger2
@@ -21,7 +23,10 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.bim.inventory"))
                 .paths(PathSelectors.any())
-                .build().apiInfo(metaData());
+                .build().apiInfo(metaData())
+                .securityContexts(Collections.emptyList()) // Disable security context
+                .securitySchemes(Collections.emptyList()); // Disable security schemes
+
     }
 
     private ApiInfo metaData() {
@@ -34,6 +39,7 @@ public class SwaggerConfig {
                 .contact(new Contact("Isomov Alibek", "t.me/IA_developer", "aisomov.dev@gmail.com"))
                 .build();
     }
+
     //for Swagger api doc generation
     //http://localhost:8082/v2/api-docs
 }
