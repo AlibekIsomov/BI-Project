@@ -49,12 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api/account/authenticate").permitAll()
-                .antMatchers("/api/account/register").permitAll()
-                .antMatchers("/api/swagger-ui.html").permitAll()
-                .antMatchers("/swagger-ui.html", "/webjars/**", "/v2/api-docs/**", "/swagger-resources/**").permitAll()
 
 
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
                 .and()

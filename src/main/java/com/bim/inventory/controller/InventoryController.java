@@ -37,6 +37,7 @@ public class InventoryController {
     }
 
 
+    @PostMapping
     public ResponseEntity<Inventory> create(@RequestBody InventoryDTO data) {
         try {
             Optional<Inventory> inventory = inventoryService.create(data);
