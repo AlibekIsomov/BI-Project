@@ -4,8 +4,12 @@ package com.bim.inventory.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Worker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +25,17 @@ public class Worker {
 
     private String name;
     private String surname;
-    private String jobDescription;
-    private double salary;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "worker")
-    private List<SalaryRecord> salaryHistory = new ArrayList<>();
+
+    private double initialSalary;
+
+    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
+    private List<SalaryChange> salaryChanges = new ArrayList<>();
+
+    @CreatedBy
+    private String createdBy;
+
+    @CreatedDate
+    private Instant createdAt;
 
 }

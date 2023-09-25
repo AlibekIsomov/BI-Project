@@ -1,11 +1,11 @@
 package com.bim.inventory.service.Impl;
 
+import com.bim.inventory.dto.SalaryChangeDTO;
 import com.bim.inventory.dto.WorkerDTO;
-import com.bim.inventory.entity.SalaryRecord;
+import com.bim.inventory.entity.SalaryChange;
 import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.WorkerRepository;
 import com.bim.inventory.service.WorkerService;
-import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkerServiceImpl implements WorkerService {
@@ -43,7 +44,6 @@ public class WorkerServiceImpl implements WorkerService {
         Worker worker = new Worker();
         worker.setName(data.getName());
         worker.setSurname(data.getSurname());
-        worker.setSalary(data.getSalary());
 
         return Optional.of(workerRepository.save(worker));
     }
@@ -54,7 +54,6 @@ public class WorkerServiceImpl implements WorkerService {
         Worker worker = new Worker();
         worker.setName(data.getName());
         worker.setSurname(data.getSurname());
-        worker.setSalary(data.getSalary());
 
         return Optional.of(workerRepository.save(worker));
     }
@@ -70,29 +69,56 @@ public class WorkerServiceImpl implements WorkerService {
         }
         workerRepository.deleteById(id);
     }
-
-
-    public Worker changeSalary(Long workerId) throws Exception{
+    @Override
+    public WorkerDTO updateSalary(Long workerId, double newSalary) {
         Worker worker = workerRepository.findById(workerId)
-                .orElseThrow(() -> new NotFoundException("Worker not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
 
-        // Create a new salary record
-        SalaryRecord salaryRecord = new SalaryRecord();
-        salaryRecord.setSalaryAmount(worker.getSalary()); // Record the existing salary
-        salaryRecord.setTimestamp(LocalDateTime.now());
-        salaryRecord.setWorker(worker);
+        double oldSalary = worker.getSalaryChanges().isEmpty()
+                ? worker.getInitialSalary()
+                : worker.getSalaryChanges().get(worker.getSalaryChanges().size() - 1).getNewSalary();
 
-        // Update the worker's current salary and add the record to history
-        worker.getSalaryHistory().add(salaryRecord);
+        SalaryChange salaryChange = new SalaryChange();
+        salaryChange.setOldSalary(oldSalary);
+        salaryChange.setNewSalary(newSalary);
+        salaryChange.setChangeDate(new Date());
+        salaryChange.setWorker(worker);
 
-        // Save the updated worker
-        return workerRepository.save(worker);
+        worker.getSalaryChanges().add(salaryChange);
+
+        workerRepository.save(worker);
+
+        return convertToDTO(worker);
     }
 
-    public List<SalaryRecord> getSalaryHistory(Long workerId) throws Exception {
+    @Override
+    public WorkerDTO getWorkerSalaryHistory(Long workerId) {
         Worker worker = workerRepository.findById(workerId)
-                .orElseThrow(() -> new NotFoundException("Worker not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
 
-        return worker.getSalaryHistory();
+        return convertToDTO(worker);
     }
+    @Override
+    public WorkerDTO convertToDTO(Worker worker) {
+        WorkerDTO workerDTO = new WorkerDTO();
+        workerDTO.setId(worker.getId());
+        workerDTO.setName(worker.getName());
+
+        List<SalaryChangeDTO> salaryChangesDTO = worker.getSalaryChanges().stream()
+                .map(salaryChange -> {
+                    SalaryChangeDTO dto = new SalaryChangeDTO();
+                    dto.setOldSalary(salaryChange.getOldSalary());
+                    dto.setNewSalary(salaryChange.getNewSalary());
+                    dto.setChangeDate(salaryChange.getChangeDate());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        workerDTO.setSalaryChanges(salaryChangesDTO);
+
+        return workerDTO;
+    }
+
+
+
 }

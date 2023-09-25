@@ -6,23 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-public class SalaryRecord {
+public class SalaryChange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private double salaryAmount;
+    private double oldSalary;
+    private double newSalary;
+    private Date changeDate;
 
     @ManyToOne
-    @JoinColumn(name = "worker_id")
     private Worker worker;
-
-    private LocalDateTime timestamp;
-
 }

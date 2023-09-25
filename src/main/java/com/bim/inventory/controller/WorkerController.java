@@ -1,8 +1,8 @@
 package com.bim.inventory.controller;
 
 import com.bim.inventory.dto.WorkerDTO;
-import com.bim.inventory.entity.SalaryRecord;
 import com.bim.inventory.entity.Worker;
+import com.bim.inventory.repository.WorkerRepository;
 import com.bim.inventory.service.WorkerService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,18 +19,23 @@ import java.util.Optional;
 public class WorkerController{
     @Autowired
     WorkerService workerService;
+    @Autowired
+    WorkerRepository workerRepository;
 
-    @PutMapping("/{workerId}/salary")
-    public ResponseEntity<Worker> changeSalary(@PathVariable Long workerId) throws Exception {
-        Worker updatedWorker = workerService.changeSalary(workerId);
+    @PutMapping("/{id}/update-salary")
+    public ResponseEntity<WorkerDTO> updateSalary(
+            @PathVariable Long id,
+            @RequestParam double newSalary) {
+        WorkerDTO updatedWorker = workerService.updateSalary(id, newSalary);
         return ResponseEntity.ok(updatedWorker);
     }
 
-    @GetMapping("/{workerId}/salary/history")
-    public ResponseEntity<List<SalaryRecord>> getSalaryHistory(@PathVariable Long workerId) throws Exception {
-        List<SalaryRecord> salaryHistory = workerService.getSalaryHistory(workerId);
-        return ResponseEntity.ok(salaryHistory);
+    @GetMapping("/{id}/salary-history")
+    public ResponseEntity<WorkerDTO> getSalaryHistory(@PathVariable Long id) {
+        WorkerDTO workerHistory = workerService.getWorkerSalaryHistory(id);
+        return ResponseEntity.ok(workerHistory);
     }
+
 
     @GetMapping
     public ResponseEntity<Page<Worker>> getAll(Pageable pageable) throws Exception {
