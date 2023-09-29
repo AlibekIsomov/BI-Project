@@ -5,6 +5,7 @@ import com.bim.inventory.dto.CategoryDTO;
 import com.bim.inventory.entity.Category;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.service.CategoryService;
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +47,20 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     public Optional<Category> update(Long id, CategoryDTO data) throws Exception {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
 
-        Category category = new Category();
+        if (optionalCategory.isPresent()) {
+            Category category = optionalCategory.get();
+            category.setName(data.getName());
 
-        category.setName(data.getName());
-
-        return Optional.of(categoryRepository.save(category));
+            // Save the updated category
+            return Optional.of(categoryRepository.save(category));
+        } else {
+            // Handle the case where the category with the given ID doesn't exist
+            throw new NotFoundException("Category not found with ID: " + id);
+        }
     }
+
     @Override
     public Page<Category> getAllByNameContains(String name, Pageable pageable) {
         return categoryRepository.findAllByNameContains(name,pageable);

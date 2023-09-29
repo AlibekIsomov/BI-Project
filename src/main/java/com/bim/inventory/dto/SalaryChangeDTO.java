@@ -10,7 +10,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalaryChangeDTO {
-    private double oldSalary;
     private double newSalary;
     private Date changeDate;
 }

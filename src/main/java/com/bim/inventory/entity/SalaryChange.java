@@ -16,8 +16,9 @@ public class SalaryChange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double oldSalary;
+
     private double newSalary;
+
     private Date changeDate;
 
     @ManyToOne

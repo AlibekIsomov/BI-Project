@@ -1,6 +1,7 @@
 package com.bim.inventory.controller;
 
 import com.bim.inventory.dto.WorkerDTO;
+import com.bim.inventory.entity.SalaryChange;
 import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.WorkerRepository;
 import com.bim.inventory.service.WorkerService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -22,17 +24,44 @@ public class WorkerController{
     @Autowired
     WorkerRepository workerRepository;
 
-    @PutMapping("/{id}/update-salary")
+    @PutMapping("/{workerId}/update-salary")
     public ResponseEntity<WorkerDTO> updateSalary(
-            @PathVariable Long id,
+            @PathVariable Long workerId,
             @RequestParam double newSalary) {
-        WorkerDTO updatedWorker = workerService.updateSalary(id, newSalary);
-        return ResponseEntity.ok(updatedWorker);
+
+        Optional<Worker> workerOptional = workerRepository.findById(workerId);
+
+        if (workerOptional.isPresent()) {
+            Worker worker = workerOptional.get();
+
+            // Update the worker's current salary
+            worker.setInitialSalary(newSalary);
+
+            // Create a new salary change record
+            SalaryChange salaryChange = new SalaryChange();
+            salaryChange.setNewSalary(newSalary);
+            salaryChange.setNewSalary(worker.getInitialSalary());
+            salaryChange.setChangeDate(new Date());
+            salaryChange.setWorker(worker);
+
+            // Add the salary change to the worker's list of salary changes
+            worker.getSalaryChanges().add(salaryChange);
+
+            // Save the updated worker
+            workerRepository.save(worker);
+
+            // Convert and return the updated worker as a DTO
+            WorkerDTO updatedWorkerDTO = workerService.convertToDTO(worker);
+            return ResponseEntity.ok(updatedWorkerDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/{id}/salary-history")
-    public ResponseEntity<WorkerDTO> getSalaryHistory(@PathVariable Long id) {
-        WorkerDTO workerHistory = workerService.getWorkerSalaryHistory(id);
+
+    @GetMapping("/{id}/")
+    public ResponseEntity<WorkerDTO> getbyid(@PathVariable Long id) {
+        WorkerDTO workerHistory = workerService.getbyid(id);
         return ResponseEntity.ok(workerHistory);
     }
 
@@ -40,11 +69,6 @@ public class WorkerController{
     @GetMapping
     public ResponseEntity<Page<Worker>> getAll(Pageable pageable) throws Exception {
         return ResponseEntity.ok(workerService.getAll(pageable));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Worker> getById(@PathVariable Long id) throws Exception {
-        return workerService.getById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
