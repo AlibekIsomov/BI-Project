@@ -1,8 +1,6 @@
 package com.bim.inventory.controller;
 
-import com.bim.inventory.dto.InputDTO;
 import com.bim.inventory.dto.OutputDTO;
-import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.OutputItemRepository;
 import com.bim.inventory.service.OutputItemService;

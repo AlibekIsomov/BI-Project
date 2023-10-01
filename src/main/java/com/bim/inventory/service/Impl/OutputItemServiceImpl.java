@@ -1,9 +1,7 @@
 package com.bim.inventory.service.Impl;
 
-import com.bim.inventory.dto.InputDTO;
 import com.bim.inventory.dto.OutputDTO;
 import com.bim.inventory.entity.Category;
-import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.repository.OutputItemRepository;
@@ -115,12 +113,6 @@ public class OutputItemServiceImpl implements OutputItemService {
         return itemRepository.findByCreatedAtBetween(fromDate, toDate);
     }
 
-
-
-    @Override
-    public List<OutputItem> getItemsCreatedAfter(LocalDateTime fromDate) {
-        return itemRepository.findByCreatedAtAfter(fromDate);
-    }
 
     @Override
     public double getTotalPrice() {

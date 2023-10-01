@@ -1,7 +1,6 @@
 package com.bim.inventory.service;
 
 import com.bim.inventory.dto.OutputDTO;
-import com.bim.inventory.entity.InputItem;
 import com.bim.inventory.entity.OutputItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +19,5 @@ public interface OutputItemService extends CommonService<OutputItem, Long>  {
     Page<OutputItem> getAllByNameContains(String name,Pageable pageable);
     List<OutputItem> getAllItems();
     double getTotalPrice();
-
-    List<OutputItem> getItemsCreatedAfter(LocalDateTime fromDate);
-
-    List<OutputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate);
 
 }

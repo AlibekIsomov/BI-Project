@@ -1,9 +1,7 @@
 package com.bim.inventory.controller;
 
 import com.bim.inventory.dto.CategoryDTO;
-import com.bim.inventory.dto.WorkerDTO;
 import com.bim.inventory.entity.Category;
-import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.service.CategoryService;
 
