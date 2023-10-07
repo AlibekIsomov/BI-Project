@@ -18,6 +18,8 @@ public class WorkerDTO {
 
   private double initialSalary;
 
+  private String jobDescription;
+
   private List<SalaryChangeDTO> salaryChanges;
 
 }

@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -23,6 +25,13 @@ public class Category {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<InputItem> inputItems = new ArrayList<>();
+
+    // Define a bidirectional relationship with OutputItem entities
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OutputItem> outputItems = new ArrayList<>();
 
     @CreatedBy
     private String createdBy;

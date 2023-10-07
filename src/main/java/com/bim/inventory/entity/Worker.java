@@ -27,6 +27,7 @@ public class Worker {
 
     private String surname;
 
+    private String jobDescription;
 
     private double initialSalary;
 

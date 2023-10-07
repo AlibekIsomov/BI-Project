@@ -109,11 +109,6 @@ public class OutputItemServiceImpl implements OutputItemService {
 
     }
 
-    public List<OutputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate) {
-        return itemRepository.findByCreatedAtBetween(fromDate, toDate);
-    }
-
-
     @Override
     public double getTotalPrice() {
         List<OutputItem> items = getAllItems();

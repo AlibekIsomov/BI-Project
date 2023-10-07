@@ -44,6 +44,7 @@ public class WorkerServiceImpl implements WorkerService {
         Worker worker = new Worker();
         worker.setName(data.getName());
         worker.setSurname(data.getSurname());
+        worker.setJobDescription(data.getJobDescription());
         worker.setInitialSalary(data.getInitialSalary());
 
         return Optional.of(workerRepository.save(worker));
@@ -59,6 +60,7 @@ public class WorkerServiceImpl implements WorkerService {
             // Update the worker's name and surname based on the data from WorkerDTO
             worker.setName(data.getName());
             worker.setSurname(data.getSurname());
+            worker.setJobDescription(data.getJobDescription());
 
             // Save the updated worker
             return Optional.of(workerRepository.save(worker));
@@ -95,6 +97,7 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setId(worker.getId());
         workerDTO.setName(worker.getName());
         workerDTO.setSurname(worker.getSurname());
+        workerDTO.setJobDescription(workerDTO.getJobDescription());
         workerDTO.setInitialSalary(worker.getInitialSalary());
 
         List<SalaryChangeDTO> salaryChangeDTOs = worker.getSalaryChanges()

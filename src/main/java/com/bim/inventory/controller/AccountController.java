@@ -12,6 +12,7 @@ import com.bim.inventory.security.UserSpecial;
 import com.bim.inventory.service.UserService;
 import com.bim.inventory.vm.UserVM;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -69,8 +70,12 @@ public class AccountController {
     }
 
     @GetMapping("/current-user")
-    public ResponseEntity<UserDTO> getCurrentUser(){
-        return ResponseEntity.ok(userService.getCurrentUser());
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        UserDTO user = userService.getCurrentUser();
+        if (user != null)
+            return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok(user);
     }
 
 

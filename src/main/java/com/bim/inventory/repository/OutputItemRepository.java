@@ -13,9 +13,13 @@ import java.util.List;
 public interface OutputItemRepository extends JpaRepository<OutputItem, Long> {
 
     Page<OutputItem> findAllByNameContains(String name, Pageable pageable);
-    public Page<OutputItem> findAllByOrderByIdDesc(Pageable pageable);
 
     List<OutputItem> findByCreatedAtBetween(LocalDateTime fromDate, LocalDateTime toDate);
 
-    List<OutputItem> findByCreatedAtAfter(LocalDateTime fromDate);
+    List<OutputItem> findAllByCategoryId(Long id);
+
+
+
+
+
 }

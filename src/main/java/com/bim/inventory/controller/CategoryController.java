@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,6 +25,19 @@ public class CategoryController  {
     CategoryRepository categoryRepository;
     @Autowired
     CategoryService categoryService;
+
+    @GetMapping("/items")
+    public ResponseEntity<List<Category>> findCategoriesByItems(
+            @RequestParam("inputItemId") Long inputItemId,
+            @RequestParam("outputItemId") Long outputItemId) {
+        List<Category> categories = categoryService.getItemsofCategory(inputItemId, outputItemId);
+        if (categories.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(categories);
+    }
+
+
 
     @GetMapping
     public ResponseEntity<Page<Category>> getAll(Pageable pageable) throws Exception {
