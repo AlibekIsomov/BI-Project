@@ -18,5 +18,4 @@ public interface CategoryService extends CommonService<Category, Long> {
     Page<Category> getAllByNameContains(String name, Pageable pageable);
 
 
-    List<Category> getItemsofCategory(Long inputItemId, Long outputItemId);
 }

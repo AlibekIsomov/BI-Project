@@ -1,6 +1,7 @@
 package com.bim.inventory.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Worker {
 
     private double initialSalary;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
     private List<SalaryChange> salaryChanges = new ArrayList<>();
 

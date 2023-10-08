@@ -20,6 +20,7 @@ public class WorkerDTO {
 
   private String jobDescription;
 
+
   private List<SalaryChangeDTO> salaryChanges;
 
 }

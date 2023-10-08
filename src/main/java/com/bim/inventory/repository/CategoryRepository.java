@@ -16,8 +16,4 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Page<Category> findAllByNameContains(String name, Pageable pageable);
 
-    @Query("SELECT c FROM Category c JOIN c.inputItems i JOIN c.outputItems o WHERE i.id = :inputItemId AND o.id = :outputItemId")
-    List<Category> findByInputItemIdAndOutputItemId(@Param("inputItemId") Long inputItemId, @Param("outputItemId") Long outputItemId);
-
-
 }

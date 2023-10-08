@@ -26,19 +26,6 @@ public class CategoryController  {
     @Autowired
     CategoryService categoryService;
 
-    @GetMapping("/items")
-    public ResponseEntity<List<Category>> findCategoriesByItems(
-            @RequestParam("inputItemId") Long inputItemId,
-            @RequestParam("outputItemId") Long outputItemId) {
-        List<Category> categories = categoryService.getItemsofCategory(inputItemId, outputItemId);
-        if (categories.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(categories);
-    }
-
-
-
     @GetMapping
     public ResponseEntity<Page<Category>> getAll(Pageable pageable) throws Exception {
         return ResponseEntity.ok(categoryService.getAll(pageable));
