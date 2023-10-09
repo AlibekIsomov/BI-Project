@@ -1,9 +1,9 @@
 package com.bim.inventory.service.Impl;
 
 import com.bim.inventory.dto.InventoryDTO;
-import com.bim.inventory.entity.Attachment;
+import com.bim.inventory.entity.FileEntity;
 import com.bim.inventory.entity.Inventory;
-import com.bim.inventory.repository.AttachmentRepo;
+import com.bim.inventory.repository.FileRepository;
 import com.bim.inventory.repository.InventoryRepository;
 import com.bim.inventory.service.InventoryService;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Autowired
     InventoryRepository inventoryRepository;
     @Autowired
-    AttachmentRepo attachmentRepo;
+    FileRepository fileRepository;
 
     @Override
     public Page<Inventory> getAll(Pageable pageable) throws Exception {
@@ -41,8 +41,8 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public Optional<Inventory> create(InventoryDTO data) throws Exception {
 
-        Optional<Attachment> optionalAttachment = attachmentRepo.findById(data.getAttachmentId());
-        if (!optionalAttachment.isPresent()) {
+        Optional<FileEntity> optionalFileEntity = fileRepository.findById(data.getFileEntityId());
+        if (!optionalFileEntity.isPresent()) {
             logger.info("Such ID category does not exist!");
         }
 
@@ -51,14 +51,14 @@ public class InventoryServiceImpl implements InventoryService {
         inventory.setPrice(data.getPrice());
         inventory.setDescription(data.getDescription());
         inventory.setCount(data.getCount());
-        inventory.setAttachment(optionalAttachment.get());
+        inventory.setFileEntity(optionalFileEntity.get());
 
         return Optional.of(inventoryRepository.save(inventory));
     }
     @Override
     public Optional<Inventory> update(Long id, InventoryDTO data) throws Exception {
         Optional<Inventory> existingInventory = inventoryRepository.findById(id);
-        Optional<Attachment> optionalAttachment = attachmentRepo.findById(data.getAttachmentId());
+        Optional<FileEntity> optionalFileEntity = fileRepository.findById(data.getFileEntityId());
         if (!existingInventory.isPresent()) {
             logger.info("Inventory with id " + id + " does not exist");
             return null;
@@ -70,7 +70,7 @@ public class InventoryServiceImpl implements InventoryService {
         inventoryUpdate.setPrice(data.getPrice());
         inventoryUpdate.setDescription(data.getDescription());
         inventoryUpdate.setCount(data.getCount());
-        inventoryUpdate.setAttachment(optionalAttachment.get());
+        inventoryUpdate.setFileEntity(optionalFileEntity.get());
 
         return Optional.of(inventoryRepository.save(inventoryUpdate));
     }

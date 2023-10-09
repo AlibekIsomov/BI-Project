@@ -12,7 +12,7 @@ public class InventoryDTO {
 
     private String name;
 
-    private Integer attachmentId;
+    private Long fileEntityId;
 
     private double price;
 

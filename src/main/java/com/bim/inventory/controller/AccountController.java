@@ -1,7 +1,6 @@
 package com.bim.inventory.controller;
 
 
-
 import com.bim.inventory.dto.UserDTO;
 import com.bim.inventory.entity.User;
 import com.bim.inventory.repository.UserRepository;
@@ -12,7 +11,6 @@ import com.bim.inventory.security.UserSpecial;
 import com.bim.inventory.service.UserService;
 import com.bim.inventory.vm.UserVM;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

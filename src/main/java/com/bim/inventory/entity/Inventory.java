@@ -34,7 +34,7 @@ public class Inventory {
     private String name;
 
     @OneToOne
-    private Attachment attachment;
+    private FileEntity fileEntity;
 
     @Column(nullable = false)
     private double price;
