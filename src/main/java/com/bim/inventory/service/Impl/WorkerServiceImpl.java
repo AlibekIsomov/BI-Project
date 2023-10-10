@@ -97,7 +97,7 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setId(worker.getId());
         workerDTO.setName(worker.getName());
         workerDTO.setSurname(worker.getSurname());
-        workerDTO.setJobDescription(workerDTO.getJobDescription());
+        workerDTO.setJobDescription(worker.getJobDescription());
         workerDTO.setInitialSalary(worker.getInitialSalary());
 
         List<SalaryChangeDTO> salaryChangeDTOs = worker.getSalaryChanges()

@@ -16,10 +16,6 @@ public class FileServiceImpl implements FileService {
     @Autowired
     FileRepository fileRepository;
 
-//    public FileServiceImpl(FaylRepository faylRepository) {
-//        this.faylRepository = faylRepository;
-//    }
-
     @Override
     public List<FileEntity> getAll(String key) {
         return fileRepository.findAll();

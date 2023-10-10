@@ -61,7 +61,7 @@ public class FileController {
     public ResponseEntity<?> downloadFile(@PathVariable Long id) {
         FileEntity f = faylService.getById(id);
 
-        java.io.File file = new java.io.File(ROOT_DIRECTORY + "/" + f.getId() + "_" + f.getNom());
+        java.io.File file = new java.io.File(ROOT_DIRECTORY + "/" + f.getId() + "_" + f.getName());
         if (file.exists()) {
 
             try {
@@ -72,8 +72,8 @@ public class FileController {
                 headers.add("Expires", "0");
 
                 MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
-                if(f.getTur() != null){
-                    mediaType = MediaType.parseMediaType(f.getTur());
+                if(f.getType() != null){
+                    mediaType = MediaType.parseMediaType(f.getType());
                 }
 
                 return ResponseEntity.ok()
@@ -94,14 +94,14 @@ public class FileController {
     @PostMapping("/upload")
     public ResponseEntity<FileEntity> upload(@RequestParam("file") MultipartFile file) {
         FileEntity f = new FileEntity();
-        f.setNom(file.getOriginalFilename());
-        f.setTur(file.getContentType());
+        f.setName(file.getOriginalFilename());
+        f.setType(file.getContentType());
         f = faylService.create(f);
         try {
             java.io.File saqlashFayl = new java.io.File(ROOT_DIRECTORY);
             if (!saqlashFayl.exists()) saqlashFayl.mkdirs();
 
-            saqlashFayl = new File(ROOT_DIRECTORY + "/" + f.getId() + "_" + f.getNom());
+            saqlashFayl = new File(ROOT_DIRECTORY + "/" + f.getId() + "_" + f.getName());
 
             saqlashFayl.createNewFile();
 

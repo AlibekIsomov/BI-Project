@@ -59,7 +59,7 @@ public class WorkerController{
     }
 
 
-    @GetMapping("/{id}/")
+    @GetMapping("/{id}")
     public ResponseEntity<WorkerDTO> getbyid(@PathVariable Long id) {
         WorkerDTO workerHistory = workerService.getbyid(id);
         return ResponseEntity.ok(workerHistory);

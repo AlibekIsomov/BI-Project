@@ -84,7 +84,9 @@ public class InventoryServiceImpl implements InventoryService {
         if (!inventoryRepository.existsById(id)) {
             logger.info("Input with id " + id + " does not exists");
         }
+        fileRepository.deleteAll(fileRepository.findAllByInventoryId(id));
         inventoryRepository.deleteById(id);
+
     }
 
 
