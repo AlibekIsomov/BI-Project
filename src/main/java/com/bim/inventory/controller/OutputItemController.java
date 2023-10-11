@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,11 +76,6 @@ public class OutputItemController  {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         itemService.deleteById(id);
-    }
-
-    @GetMapping("/created-between")
-    public List<OutputItem> getItemsCreatedBetween(LocalDateTime fromDate, LocalDateTime toDate) {
-        return outputItemRepository.findByCreatedAtBetween(fromDate, toDate);
     }
 
     @GetMapping("/total-price")

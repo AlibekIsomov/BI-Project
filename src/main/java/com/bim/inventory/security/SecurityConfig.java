@@ -50,8 +50,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
 
+                .antMatchers("/api/account/authenticate").permitAll()
 
-                .antMatchers("/**").permitAll()
+                .antMatchers("/api/category").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/category/{id}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/category/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+
+                .antMatchers("/api/inputitem").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/inputitem/{id}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/inputitem/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/inputitem/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/inputitem/total-price").hasAnyAuthority("ADMIN","MANAGER")
+
+                .antMatchers("/api/outputitem").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/outputitem/{id}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/outputitem/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/outputitem/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/outputitem/total-price").hasAnyAuthority("ADMIN","MANAGER")
+
+                .antMatchers("/api/inventory").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/inventory/{id}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/inventory/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/inventory/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+
+                .antMatchers("/api/worker").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/worker/{id}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/worker/{workerId}/update-salary").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/worker/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+
+                .antMatchers("/api/user").hasAnyAuthority("ADMIN")
+                .antMatchers("/api/user/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/api/user/all").hasAnyAuthority("ADMIN")
+                .antMatchers("/api/user/get/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/api/user/search/{key}").hasAnyAuthority("ADMIN")
+
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
                 .and()
