@@ -8,12 +8,13 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -91,5 +92,12 @@ public class OutputItemController  {
     @GetMapping("/search-name/{name}")
     public ResponseEntity<Page<OutputItem>> getAllByNameContains(@PathVariable String name, Pageable pageable){
         return ResponseEntity.ok(itemService.getAllByNameContains(name, pageable));
+    }
+
+    @GetMapping("/find-by-date-range")
+    public List<OutputItem> findItemsByDateRange(
+            @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Instant startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Instant endDate) {
+        return itemService.findItemsWithinDateRange(startDate, endDate);
     }
 }

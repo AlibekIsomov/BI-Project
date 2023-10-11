@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,8 +19,6 @@ public interface OutputItemRepository extends JpaRepository<OutputItem, Long> {
 
     List<OutputItem> findAllByCategoryId(Long id);
 
-
-
-
+    List<OutputItem> findByCreatedAtBetween(Instant startDate, Instant endDate);
 
 }

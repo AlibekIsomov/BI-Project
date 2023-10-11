@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,8 +91,8 @@ public class InputItemController   {
 
     @GetMapping("/find-by-date-range")
     public List<InputItem> findItemsByDateRange(
-            @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+            @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Instant startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Instant endDate) {
         return itemService.findItemsWithinDateRange(startDate, endDate);
     }
 }

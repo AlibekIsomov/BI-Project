@@ -24,13 +24,17 @@ public class Worker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String surname;
 
+    @Column(nullable = false)
     private String jobDescription;
 
-    private double initialSalary;
+
+    private double currentSalary;
 
     @JsonIgnore
     @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
@@ -41,5 +45,4 @@ public class Worker {
 
     @CreatedDate
     private Instant createdAt;
-
 }

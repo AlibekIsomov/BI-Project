@@ -16,7 +16,7 @@ public class WorkerDTO {
 
   private String surname;
 
-  private double initialSalary;
+  private double currentSalary;
 
   private String jobDescription;
 

@@ -31,7 +31,7 @@ public class FileController {
 
     private String ROOT_DIRECTORY = "files";
 
-    private final FileService faylService;
+    private final FileService fileService;
 
     @Value("${system.root-directory}")
     private void setDirectory(String url) {
@@ -41,7 +41,7 @@ public class FileController {
 
 
     public FileController(FileService faylService) {
-        this.faylService = faylService;
+        this.fileService = faylService;
     }
 
 
@@ -49,17 +49,17 @@ public class FileController {
     public ResponseEntity<List<FileEntity>> getAll(@RequestParam(name = "key", required = false) String key,
                                                                       HttpServletRequest req, HttpServletResponse res) {
         if (key == null) key = "";
-        return ResponseEntity.ok(faylService.getAll(key));
+        return ResponseEntity.ok(fileService.getAll(key));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FileEntity> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(faylService.getById(id));
+        return ResponseEntity.ok(fileService.getById(id));
     }
 
     @GetMapping("/download/{id}")
     public ResponseEntity<?> downloadFile(@PathVariable Long id) {
-        FileEntity f = faylService.getById(id);
+        FileEntity f = fileService.getById(id);
 
         java.io.File file = new java.io.File(ROOT_DIRECTORY + "/" + f.getId() + "_" + f.getName());
         if (file.exists()) {
@@ -96,16 +96,16 @@ public class FileController {
         FileEntity f = new FileEntity();
         f.setName(file.getOriginalFilename());
         f.setType(file.getContentType());
-        f = faylService.create(f);
+        f = fileService.create(f);
         try {
-            java.io.File saqlashFayl = new java.io.File(ROOT_DIRECTORY);
-            if (!saqlashFayl.exists()) saqlashFayl.mkdirs();
+            java.io.File saveFile = new java.io.File(ROOT_DIRECTORY);
+            if (!saveFile.exists()) saveFile.mkdirs();
 
-            saqlashFayl = new File(ROOT_DIRECTORY + "/" + f.getId() + "_" + f.getName());
+            saveFile = new File(ROOT_DIRECTORY + "/" + f.getId() + "_" + f.getName());
 
-            saqlashFayl.createNewFile();
+            saveFile.createNewFile();
 
-            FileOutputStream fos = new FileOutputStream(saqlashFayl);
+            FileOutputStream fos = new FileOutputStream(saveFile);
             fos.write(file.getBytes());
             fos.close();
             return ResponseEntity.ok(f);
@@ -113,7 +113,7 @@ public class FileController {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        faylService.delete(f);
+        fileService.delete(f);
 
         return ResponseEntity.badRequest().build();
     }
@@ -121,7 +121,7 @@ public class FileController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        faylService.deleteById(id);
+        fileService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 

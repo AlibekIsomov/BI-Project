@@ -9,8 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @AllArgsConstructor
@@ -31,5 +29,4 @@ public class Category {
 
     @CreatedDate
     private Instant createdAt;
-
 }

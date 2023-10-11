@@ -29,11 +29,10 @@ public class InputItem{
 
     private String description;
 
-    @Column(nullable = false)
     private int count;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @CreatedBy
@@ -41,6 +40,4 @@ public class InputItem{
 
     @CreatedDate
     private Instant createdAt;
-
-
 }

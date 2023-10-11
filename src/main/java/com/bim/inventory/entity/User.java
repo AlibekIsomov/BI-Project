@@ -41,8 +41,5 @@ public class User extends DistributedEntity {
     private Set<Role> roles;
 
     private Boolean active;
-
-
-
 }
 

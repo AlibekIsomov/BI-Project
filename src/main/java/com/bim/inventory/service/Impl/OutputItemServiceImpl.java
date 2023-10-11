@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,5 +117,10 @@ public class OutputItemServiceImpl implements OutputItemService {
             totalPrice += item.getPrice() * item.getCount();
         }
         return totalPrice;
+    }
+
+    @Override
+    public List<OutputItem> findItemsWithinDateRange(Instant startDate, Instant endDate) {
+        return itemRepository.findByCreatedAtBetween(startDate, endDate);
     }
 }

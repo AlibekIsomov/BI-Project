@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -87,6 +89,11 @@ public class InventoryServiceImpl implements InventoryService {
         fileRepository.deleteAll(fileRepository.findAllByInventoryId(id));
         inventoryRepository.deleteById(id);
 
+    }
+
+    @Override
+    public List<Inventory> findItemsWithinDateRange(Instant startDate, Instant endDate) {
+        return inventoryRepository.findByCreatedAtBetween(startDate, endDate);
     }
 
 

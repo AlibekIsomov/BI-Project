@@ -35,12 +35,12 @@ public class WorkerController{
             Worker worker = workerOptional.get();
 
             // Update the worker's current salary
-            worker.setInitialSalary(newSalary);
+            worker.setCurrentSalary(newSalary);
 
             // Create a new salary change record
             SalaryChange salaryChange = new SalaryChange();
             salaryChange.setNewSalary(newSalary);
-            salaryChange.setNewSalary(worker.getInitialSalary());
+            salaryChange.setNewSalary(worker.getCurrentSalary());
             salaryChange.setChangeDate(new Date());
             salaryChange.setWorker(worker);
 
