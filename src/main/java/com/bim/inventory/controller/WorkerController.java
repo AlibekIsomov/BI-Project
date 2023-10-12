@@ -34,18 +34,29 @@ public class WorkerController{
         if (workerOptional.isPresent()) {
             Worker worker = workerOptional.get();
 
-            // Update the worker's current salary
-            worker.setCurrentSalary(newSalary);
+            // Check if the list of salary changes is empty
+            if (worker.getSalaryChanges().isEmpty()) {
+                // Create a new salary change record for the initial current salary
+                SalaryChange initialSalaryChange = new SalaryChange();
+                initialSalaryChange.setNewSalary(worker.getCurrentSalary());
+                initialSalaryChange.setChangeDate(new Date());
+                initialSalaryChange.setWorker(worker);
 
-            // Create a new salary change record
+                // Add the initial salary change to the worker's list of salary changes
+                worker.getSalaryChanges().add(initialSalaryChange);
+            }
+
+            // Create a new salary change record for the new salary
             SalaryChange salaryChange = new SalaryChange();
             salaryChange.setNewSalary(newSalary);
-            salaryChange.setNewSalary(worker.getCurrentSalary());
             salaryChange.setChangeDate(new Date());
             salaryChange.setWorker(worker);
 
-            // Add the salary change to the worker's list of salary changes
+            // Add the new salary change to the worker's list of salary changes
             worker.getSalaryChanges().add(salaryChange);
+
+            // Update the worker's current salary
+            worker.setCurrentSalary(newSalary);
 
             // Save the updated worker
             workerRepository.save(worker);
@@ -57,6 +68,7 @@ public class WorkerController{
             return ResponseEntity.notFound().build();
         }
     }
+
 
 
     @GetMapping("/{id}")

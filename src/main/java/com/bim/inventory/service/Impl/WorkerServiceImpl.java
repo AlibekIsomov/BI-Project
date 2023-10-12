@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,6 +47,14 @@ public class WorkerServiceImpl implements WorkerService {
         worker.setSurname(data.getSurname());
         worker.setJobDescription(data.getJobDescription());
         worker.setCurrentSalary(data.getCurrentSalary());
+        // Create an initial salary change
+        SalaryChange initialSalaryChange = new SalaryChange();
+        initialSalaryChange.setNewSalary(worker.getCurrentSalary());
+        initialSalaryChange.setChangeDate(new Date());
+        initialSalaryChange.setWorker(worker);
+
+        // Add the initial salary change to the worker's list of salary changes
+        worker.getSalaryChanges().add(initialSalaryChange);
 
         return Optional.of(workerRepository.save(worker));
     }
@@ -90,7 +99,7 @@ public class WorkerServiceImpl implements WorkerService {
 
         return convertToDTO(worker);
     }
-    // Add other controller methods for creating, updating, and deleting workers as needed
+
     @Override
     public WorkerDTO convertToDTO(Worker worker) {
         WorkerDTO workerDTO = new WorkerDTO();

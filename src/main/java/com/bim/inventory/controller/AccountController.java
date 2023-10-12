@@ -70,7 +70,7 @@ public class AccountController {
     @GetMapping("/current-user")
     public ResponseEntity<UserDTO> getCurrentUser() {
         UserDTO user = userService.getCurrentUser();
-        if (user != null)
+        if (user.getId() != null)
             return ResponseEntity.badRequest().build();
 
         return ResponseEntity.ok(user);

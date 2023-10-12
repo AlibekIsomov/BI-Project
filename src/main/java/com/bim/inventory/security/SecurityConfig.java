@@ -78,6 +78,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/worker/{workerId}/update-salary").hasAnyAuthority("ADMIN","MANAGER")
                 .antMatchers("/api/worker/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
 
+                .antMatchers("/api/fayl").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/fayl/{id}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/fayl/download/{id}").hasAnyAuthority("ADMIN","MANAGER")
+                .antMatchers("/api/fayl/upload").hasAnyAuthority("ADMIN","MANAGER")
+
+
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+
                 .antMatchers("/api/user").hasAnyAuthority("ADMIN")
                 .antMatchers("/api/user/{id}").hasAnyAuthority("ADMIN")
                 .antMatchers("/api/user/all").hasAnyAuthority("ADMIN")
@@ -105,9 +114,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/content/**")
                 .antMatchers("/h2-console/**")
                 .antMatchers("/api/v1/auth/**")
-                .antMatchers("/v3/api-docs/**")
-                .antMatchers("/swagger-ui/**")
-                .antMatchers("/swagger-ui.html")
+//                .antMatchers("/v3/api-docs/**")
+//                .antMatchers("/swagger-ui/**")
+//                .antMatchers("/swagger-ui.html")
                 .antMatchers("/test/**")
                 .antMatchers("/*.*"); // #3
     }

@@ -37,7 +37,7 @@ public class Worker {
     private double currentSalary;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SalaryChange> salaryChanges = new ArrayList<>();
 
     @CreatedBy
