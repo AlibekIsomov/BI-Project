@@ -50,48 +50,50 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
 
-                .antMatchers("/api/account/authenticate").permitAll()
+//                .antMatchers("/api/account/authenticate").permitAll()
+//
+//                .antMatchers("/api/category").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/category/{id}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/category/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+//
+//                .antMatchers("/api/inputitem").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/inputitem/{id}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/inputitem/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/inputitem/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/inputitem/total-price").hasAnyAuthority("ADMIN","MANAGER")
+//
+//                .antMatchers("/api/outputitem").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/outputitem/{id}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/outputitem/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/outputitem/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/outputitem/total-price").hasAnyAuthority("ADMIN","MANAGER")
+//
+//                .antMatchers("/api/inventory").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/inventory/{id}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/inventory/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/inventory/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+//
+//                .antMatchers("/api/worker").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/worker/{id}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/worker/{workerId}/update-salary").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/worker/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
+//
+//                .antMatchers("/api/fayl").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/fayl/{id}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/fayl/download/{id}").hasAnyAuthority("ADMIN","MANAGER")
+//                .antMatchers("/api/fayl/upload").hasAnyAuthority("ADMIN","MANAGER")
+//
+//
+//                .antMatchers("/swagger-ui/**").permitAll()
+//                .antMatchers("/swagger-ui.html").permitAll()
+//
+//                .antMatchers("/api/user").hasAnyAuthority("ADMIN")
+//                .antMatchers("/api/user/{id}").hasAnyAuthority("ADMIN")
+//                .antMatchers("/api/user/all").hasAnyAuthority("ADMIN")
+//                .antMatchers("/api/user/get/{id}").hasAnyAuthority("ADMIN")
+//                .antMatchers("/api/user/search/{key}").hasAnyAuthority("ADMIN")
 
-                .antMatchers("/api/category").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/category/{id}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/category/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
-
-                .antMatchers("/api/inputitem").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/inputitem/{id}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/inputitem/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/inputitem/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/inputitem/total-price").hasAnyAuthority("ADMIN","MANAGER")
-
-                .antMatchers("/api/outputitem").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/outputitem/{id}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/outputitem/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/outputitem/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/outputitem/total-price").hasAnyAuthority("ADMIN","MANAGER")
-
-                .antMatchers("/api/inventory").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/inventory/{id}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/inventory/find-by-date-range").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/inventory/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
-
-                .antMatchers("/api/worker").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/worker/{id}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/worker/{workerId}/update-salary").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/worker/search-name/{name}").hasAnyAuthority("ADMIN","MANAGER")
-
-                .antMatchers("/api/fayl").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/fayl/{id}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/fayl/download/{id}").hasAnyAuthority("ADMIN","MANAGER")
-                .antMatchers("/api/fayl/upload").hasAnyAuthority("ADMIN","MANAGER")
-
-
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-
-                .antMatchers("/api/user").hasAnyAuthority("ADMIN")
-                .antMatchers("/api/user/{id}").hasAnyAuthority("ADMIN")
-                .antMatchers("/api/user/all").hasAnyAuthority("ADMIN")
-                .antMatchers("/api/user/get/{id}").hasAnyAuthority("ADMIN")
-                .antMatchers("/api/user/search/{key}").hasAnyAuthority("ADMIN")
+                .antMatchers("/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
@@ -114,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/content/**")
                 .antMatchers("/h2-console/**")
                 .antMatchers("/api/v1/auth/**")
-//                .antMatchers("/v3/api-docs/**")
+//                .antMatchers("/v2/api-docs/**")
 //                .antMatchers("/swagger-ui/**")
 //                .antMatchers("/swagger-ui.html")
                 .antMatchers("/test/**")

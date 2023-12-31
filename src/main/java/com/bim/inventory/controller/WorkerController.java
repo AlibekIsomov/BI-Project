@@ -1,7 +1,11 @@
 package com.bim.inventory.controller;
 
+import com.bim.inventory.dto.PaymentDTO;
+import com.bim.inventory.dto.SalaryChangeDTO;
+import com.bim.inventory.dto.StoreDTO;
 import com.bim.inventory.dto.WorkerDTO;
 import com.bim.inventory.entity.SalaryChange;
+import com.bim.inventory.entity.Store;
 import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.WorkerRepository;
 import com.bim.inventory.service.WorkerService;
@@ -14,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/worker")
