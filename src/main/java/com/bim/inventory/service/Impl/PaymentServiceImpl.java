@@ -126,14 +126,6 @@ public class PaymentServiceImpl implements PaymentService {
         return storeDTO;
     }
 
-//    @Override
-//    public double releasePaidAmount(Long storeId) {
-//
-//        double totalPayments = calculateTotalPaymentsByStore(storeId);
-//      double remainingAmount = Math.max( - totalPayments, 0);
-//
-//        return remainingAmount;
-//    }
 
 
     @Override

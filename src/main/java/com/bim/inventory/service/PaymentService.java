@@ -19,7 +19,7 @@ public interface PaymentService {
 
     StoreDTO convertToDTO(Store store);
 
-    double releasePaidAmount(Long storeId, int fullAmount);
+//    double releasePaidAmount(Long storeId, int fullAmount);
 
 
     void deletePayment(Long paymentId);

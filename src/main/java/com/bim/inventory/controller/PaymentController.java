@@ -35,14 +35,14 @@ public class PaymentController {
         return ResponseEntity.ok(totalPayments);
     }
 
-    @GetMapping("/release/{storeId}")
-    public ResponseEntity<Double> releasePaidAmount(
-            @PathVariable Long storeId,
-            @RequestParam int fullAmount)
-    {
-        double remainingAmount = paymentService.releasePaidAmount(storeId,  fullAmount );
-        return ResponseEntity.ok(remainingAmount);
-    }
+//    @GetMapping("/release/{storeId}")
+//    public ResponseEntity<Double> releasePaidAmount(
+//            @PathVariable Long storeId,
+//            @RequestParam int fullAmount)
+//    {
+//        double remainingAmount = paymentService.releasePaidAmount(storeId,  fullAmount );
+//        return ResponseEntity.ok(remainingAmount);
+//    }
 
 
     @PutMapping("/{storeId}/add-payment")
