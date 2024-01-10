@@ -2,17 +2,10 @@ package com.bim.inventory.controller;
 
 
 import com.bim.inventory.dto.PaymentDTO;
-import com.bim.inventory.dto.StoreDTO;
-import com.bim.inventory.dto.WorkerDTO;
 import com.bim.inventory.entity.Payment;
-import com.bim.inventory.entity.SalaryChange;
-import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.PaymentRepository;
 import com.bim.inventory.service.PaymentService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

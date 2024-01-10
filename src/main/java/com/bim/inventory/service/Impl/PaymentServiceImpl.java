@@ -11,6 +11,7 @@ import com.bim.inventory.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (storeOptional.isPresent()) {
             Store store = storeOptional.get();
+
+            // Check if the new payment is greater than or equal to the full amount
+            if (newPayment > store.getFullAmount() || calculateTotalPaymentsByStore(storeId) >= store.getFullAmount()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            }
 
             // Create a new payment record for the new payment
             Payment payment = new Payment();
