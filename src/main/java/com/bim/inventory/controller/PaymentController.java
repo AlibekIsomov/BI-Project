@@ -45,15 +45,15 @@ public class PaymentController {
 //    }
 
 
-    @PutMapping("/{storeId}/add-payment")
-    public ResponseEntity<StoreDTO> addPayment(
+    @PostMapping("/{storeId}/add-payment")
+    public ResponseEntity<Payment> addPayment(
             @PathVariable Long storeId,
-            @RequestParam double newSalary) {
-        return paymentService.addPayment(storeId, newSalary);
+            @RequestParam double newPayment) {
+        return paymentService.addPayment(storeId, newPayment);
     }
 
     @PutMapping("/{storeId}/updatePayment/{paymentId}")
-    public ResponseEntity<StoreDTO> updatePayment(
+    public ResponseEntity<Payment> updatePayment(
             @PathVariable Long storeId,
             @PathVariable Long paymentId,
             @RequestParam double newPayment

@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    private static final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
-
     @Autowired
     PaymentRepository paymentRepository;
 
@@ -32,7 +30,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public ResponseEntity<StoreDTO> addPayment(Long storeId, double newPayment) {
+    public ResponseEntity<Payment> addPayment(Long storeId, double newPayment) {
         Optional<Store> storeOptional = storeRepository.findById(storeId);
 
         if (storeOptional.isPresent()) {
@@ -52,9 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
             // Save the updated store (including the new payment)
             storeRepository.save(store);
 
-            // Convert and return the updated store as a DTO
-            StoreDTO updatedStoreDTO = convertToDTO(store);
-            return ResponseEntity.ok(updatedStoreDTO);
+            return ResponseEntity.ok(payment);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -62,7 +58,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public ResponseEntity<StoreDTO> updatePayment(Long storeId, Long paymentId, double newPayment) {
+    public ResponseEntity<Payment> updatePayment(Long storeId, Long paymentId, double newPayment) {
         Optional<Store> storeOptional = storeRepository.findById(storeId);
 
         if (storeOptional.isPresent()) {
@@ -86,8 +82,7 @@ public class PaymentServiceImpl implements PaymentService {
                 storeRepository.save(store);
 
                 // Convert and return the updated store as a DTO
-                StoreDTO updatedStoreDTO = convertToDTO(store);
-                return ResponseEntity.ok(updatedStoreDTO);
+                return ResponseEntity.ok(existingPayment);
             } else {
                 // Handle the case where the specified payment ID is not found
                 return ResponseEntity.notFound().build();
@@ -175,6 +170,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentDTO paymentDTO = new PaymentDTO();
         paymentDTO.setId(payments.getId());
         paymentDTO.setNewPayment(payments.getNewPayment());
+        paymentDTO.setCreatedAt(payments.getCreatedAt());
         return paymentDTO;
 
     }
