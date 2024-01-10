@@ -2,20 +2,22 @@ package com.bim.inventory.service.Impl;
 
 
 import com.bim.inventory.dto.PaymentDTO;
+import com.bim.inventory.dto.StoreDTO;
 import com.bim.inventory.entity.Payment;
+import com.bim.inventory.entity.Store;
 import com.bim.inventory.repository.PaymentRepository;
+import com.bim.inventory.repository.StoreRepository;
 import com.bim.inventory.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -25,39 +27,166 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     PaymentRepository paymentRepository;
 
+    @Autowired
+    StoreRepository storeRepository;
+
 
     @Override
-    public Page<Payment> getAll(Pageable pageable) throws Exception {
-        return paymentRepository.findAll(pageable);
-    }
+    public ResponseEntity<StoreDTO> addPayment(Long storeId, double newPayment) {
+        Optional<Store> storeOptional = storeRepository.findById(storeId);
 
-    @Override
-    public Optional<Payment> getById(Long id) throws Exception {
-        if (!paymentRepository.existsById(id)) {
-            logger.info("Payment with id " + id + " does not exists");
-            return Optional.empty();
+        if (storeOptional.isPresent()) {
+            Store store = storeOptional.get();
+
+            // Create a new payment record for the new payment
+            Payment payment = new Payment();
+            payment.setNewPayment(newPayment);
+            payment.setStore(store);
+
+            // Add the new payment to the store's list of payments
+            store.getPayments().add(payment);
+
+            // Update the store's lastPayment to the new payment
+            store.setLastPayment(newPayment);
+
+            // Save the updated store (including the new payment)
+            storeRepository.save(store);
+
+            // Convert and return the updated store as a DTO
+            StoreDTO updatedStoreDTO = convertToDTO(store);
+            return ResponseEntity.ok(updatedStoreDTO);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return paymentRepository.findById(id);
     }
 
 
     @Override
-    public Optional<Payment> create(PaymentDTO data) throws Exception {
+    public ResponseEntity<StoreDTO> updatePayment(Long storeId, Long paymentId, double newPayment) {
+        Optional<Store> storeOptional = storeRepository.findById(storeId);
 
-        Payment payment = new Payment();
-        payment.setNewPayment(data.getNewPayment());
+        if (storeOptional.isPresent()) {
+            Store store = storeOptional.get();
 
-        return Optional.of(paymentRepository.save(payment));
-    }
+            // Find the existing payment by ID
+            Optional<Payment> paymentOptional = store.getPayments().stream()
+                    .filter(payment -> payment.getId().equals(paymentId))
+                    .findFirst();
 
+            if (paymentOptional.isPresent()) {
+                Payment existingPayment = paymentOptional.get();
 
-    @Override
-    public void deleteById(Long id) {
-        if(!paymentRepository.existsById(id)) {
-            logger.info("Payment with id " + id + " does not exists");
+                // Update the existing payment
+                existingPayment.setNewPayment(newPayment);
+
+                // Update the store's lastPayment to the new payment
+                store.setLastPayment(newPayment);
+
+                // Save the updated store (including the updated payment)
+                storeRepository.save(store);
+
+                // Convert and return the updated store as a DTO
+                StoreDTO updatedStoreDTO = convertToDTO(store);
+                return ResponseEntity.ok(updatedStoreDTO);
+            } else {
+                // Handle the case where the specified payment ID is not found
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            // Handle the case where the specified store ID is not found
+            return ResponseEntity.notFound().build();
         }
-        paymentRepository.deleteById(id);
     }
+
+    @Override
+    public double calculateTotalPaymentsByStore(Long storeId){
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new EntityNotFoundException("Store not found with id: " + storeId));
+
+        return paymentRepository.calculateTotalPaymentsByStore(store);
+    }
+
+
+    @Override
+    public StoreDTO convertToDTO(Store store) {
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setId(store.getId());
+        storeDTO.setFullAmount(store.getFullAmount());
+        storeDTO.setContractNumber(store.getContractNumber());
+        storeDTO.setFullName(store.getFullName());
+        storeDTO.setSize(store.getSize());
+        storeDTO.setStoreNumber(store.getStoreNumber());
+
+        List<PaymentDTO> paymentDTOs = store.getPayments()
+                .stream()
+                .map(this::convertToPaymentDTO)
+                .collect(Collectors.toList());
+        storeDTO.setPayments(paymentDTOs);
+
+        return storeDTO;
+    }
+
+//    @Override
+//    public double releasePaidAmount(Long storeId) {
+//
+//        double totalPayments = calculateTotalPaymentsByStore(storeId);
+//      double remainingAmount = Math.max( - totalPayments, 0);
+//
+//        return remainingAmount;
+//    }
+
+
+    @Override
+    public void deletePayment(Long paymentId) {
+        Optional<Payment> paymentOptional = paymentRepository.findById(paymentId);
+
+        if (paymentOptional.isPresent()) {
+            Payment paymentToDelete = paymentOptional.get();
+
+            // Remove the payment from the associated store's payments list
+            Store store = paymentToDelete.getStore();
+            if (store != null) {
+                store.getPayments().remove(paymentToDelete);
+            }
+
+            // Delete the payment from the database
+            paymentRepository.delete(paymentToDelete);
+        } else {
+            // Handle the case where the payment with the given id is not found
+            // You can throw an exception, log a message, or handle it in another way.
+            // For simplicity, I'll log a message.
+            System.out.println("Payment with id " + paymentId + " not found");
+        }
+    }
+
+        @Override
+        public ResponseEntity<List<PaymentDTO>> getAllPayments (Long storeId){
+            Optional<Store> storeOptional = storeRepository.findById(storeId);
+
+            if (storeOptional.isPresent()) {
+                Store store = storeOptional.get();
+
+                List<PaymentDTO> paymentDTOs = store.getPayments()
+                        .stream()
+                        .map(this::convertToPaymentDTO)
+                        .collect(Collectors.toList());
+
+                return ResponseEntity.ok(paymentDTOs);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }
+
+
+
+        private PaymentDTO convertToPaymentDTO(Payment payments) {
+        PaymentDTO paymentDTO = new PaymentDTO();
+        paymentDTO.setId(payments.getId());
+        paymentDTO.setNewPayment(payments.getNewPayment());
+        return paymentDTO;
+
+    }
+
 
 
 }

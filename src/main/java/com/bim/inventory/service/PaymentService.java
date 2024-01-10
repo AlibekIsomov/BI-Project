@@ -1,25 +1,28 @@
 package com.bim.inventory.service;
 
 import com.bim.inventory.dto.PaymentDTO;
-import com.bim.inventory.entity.Payment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.bim.inventory.dto.StoreDTO;
+import com.bim.inventory.entity.Store;
+import org.springframework.http.ResponseEntity;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
+
 
 public interface PaymentService {
 
-    Optional<Payment> create(PaymentDTO data) throws Exception;
 
-    Page<Payment> getAll(Pageable pageable) throws Exception;
+    ResponseEntity<StoreDTO> addPayment(Long storeId, double newPayment);
 
-    Optional<Payment> getById(Long id) throws Exception;
+    ResponseEntity<StoreDTO> updatePayment(Long storeId, Long paymentId, double newPayment);
 
-//    Optional<Payment> update(Long id, PaymentDTO data) throws Exception;
+    double calculateTotalPaymentsByStore(Long storeId);
 
-    void deleteById(Long id);
+    StoreDTO convertToDTO(Store store);
+
+    double releasePaidAmount(Long storeId, int fullAmount);
 
 
+    void deletePayment(Long paymentId);
+
+    ResponseEntity<List<PaymentDTO>> getAllPayments(Long storeId);
 }

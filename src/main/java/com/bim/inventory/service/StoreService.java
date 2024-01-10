@@ -25,20 +25,27 @@ public interface StoreService {
 
     Page<Store> getAllByStoreNumberContains(int storeNumber, Pageable pageable);
 
+    List<Store> findItemsWithinDateRange(Instant startDate, Instant endDate);
 //    List<Store> getByFullAmount(int fullAmount);
 
-    List<Store> findItemsWithinDateRange(Instant startDate, Instant endDate);
+
 
 //    double getRemainingAmount(int fullAmount);
 
 
-    ResponseEntity<StoreDTO> updatePayment(Long storeId, double newPayment);
+//    ResponseEntity<StoreDTO> addPayment(Long storeId, double newPayment);
+//
+//    double calculateTotalPaymentsByStore(Long storeId);
 
-    double calculateTotalPaymentsByStore(Long storeId);
-
-    StoreDTO convertToDTO(Store store);
+//    StoreDTO convertToDTO(Store store);
 
 //    double releasePaidAmount(Long storeId, double amountToRelease);
 
 //    double releasePaidAmount(Long storeId);
+
+//    double releasePaidAmount(Long storeId, int fullAmount);
+
+//    double releasePaidAmount(Long storeId, int fullAmount);
+//
+//    ResponseEntity<StoreDTO> updatePayment(Long storeId, Long paymentId, double newPayment);
 }

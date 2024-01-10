@@ -1,6 +1,7 @@
 package com.bim.inventory.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,14 +32,17 @@ public class Store {
 
     private int storeNumber;
 
+    @Column(name = "initialPayment")
     private int initialPayment;
 
     private double size;
 
     private double lastPayment;
 
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-    private List<Payment> payments = new ArrayList<>();;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Payment> payments = new ArrayList<>();
 
     @CreatedBy
     private String createdBy;

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -24,11 +25,13 @@ public class StoreController {
     @Autowired
     StoreRepository storeRepository;
 
+    @Transactional
     @GetMapping
     public ResponseEntity<Page<Store>> getAll(Pageable pageable) throws Exception {
         return ResponseEntity.ok(storeService.getAll(pageable));
     }
 
+    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity<Store> getById(@PathVariable Long id) throws Exception {
         return storeService.getById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -76,31 +79,5 @@ public class StoreController {
         return ResponseEntity.ok(storeService.getAllByStoreNumberContains(storeNumber, pageable));
     }
 
-//    @GetMapping("/remaining-amount")
-//    public double getRemainingAmount(@RequestParam int fullAmount) {
-//        return storeService.getRemainingAmount(fullAmount);
-//    }
-
-
-    @GetMapping("/total/{storeId}")
-    public ResponseEntity<Double> getTotalPaymentsByStore(@PathVariable Long storeId) {
-        double totalPayments = storeService.calculateTotalPaymentsByStore(storeId);
-        return ResponseEntity.ok(totalPayments);
-    }
-
-//    @PostMapping("/release/{storeId}")
-//    public ResponseEntity<Double> releasePaidAmount(
-//            @PathVariable Long storeId) {
-//        double remainingAmount = storeService.releasePaidAmount(storeId);
-//        return ResponseEntity.ok(remainingAmount);
-//    }
-
-
-    @PutMapping("/{storeId}/update-salary")
-    public ResponseEntity<StoreDTO> updateSalary(
-            @PathVariable Long storeId,
-            @RequestParam double newSalary) {
-        return storeService.updatePayment(storeId, newSalary);
-    }
 
 }
