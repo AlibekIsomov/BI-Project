@@ -9,7 +9,9 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SalaryChangeDTO {
+public class SalaryDTO {
+
     private double newSalary;
+
     private Date changeDate;
 }

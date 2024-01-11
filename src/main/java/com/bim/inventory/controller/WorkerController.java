@@ -1,11 +1,7 @@
 package com.bim.inventory.controller;
 
-import com.bim.inventory.dto.PaymentDTO;
-import com.bim.inventory.dto.SalaryChangeDTO;
-import com.bim.inventory.dto.StoreDTO;
 import com.bim.inventory.dto.WorkerDTO;
-import com.bim.inventory.entity.SalaryChange;
-import com.bim.inventory.entity.Store;
+import com.bim.inventory.entity.Salary;
 import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.WorkerRepository;
 import com.bim.inventory.service.WorkerService;
@@ -18,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/worker")
@@ -29,53 +23,6 @@ public class WorkerController{
     WorkerService workerService;
     @Autowired
     WorkerRepository workerRepository;
-
-    @PutMapping("/{workerId}/update-salary")
-    public ResponseEntity<WorkerDTO> updateSalary(
-            @PathVariable Long workerId,
-            @RequestParam double newSalary) {
-
-        Optional<Worker> workerOptional = workerRepository.findById(workerId);
-
-        if (workerOptional.isPresent()) {
-            Worker worker = workerOptional.get();
-
-            // Check if the list of salary changes is empty
-            if (worker.getSalaryChanges().isEmpty()) {
-                // Create a new salary change record for the initial current salary
-                SalaryChange initialSalaryChange = new SalaryChange();
-                initialSalaryChange.setNewSalary(worker.getCurrentSalary());
-                initialSalaryChange.setChangeDate(new Date());
-                initialSalaryChange.setWorker(worker);
-
-                // Add the initial salary change to the worker's list of salary changes
-                worker.getSalaryChanges().add(initialSalaryChange);
-            }
-
-            // Create a new salary change record for the new salary
-            SalaryChange salaryChange = new SalaryChange();
-            salaryChange.setNewSalary(newSalary);
-            salaryChange.setChangeDate(new Date());
-            salaryChange.setWorker(worker);
-
-            // Add the new salary change to the worker's list of salary changes
-            worker.getSalaryChanges().add(salaryChange);
-
-            // Update the worker's current salary
-            worker.setCurrentSalary(newSalary);
-
-            // Save the updated worker
-            workerRepository.save(worker);
-
-            // Convert and return the updated worker as a DTO
-            WorkerDTO updatedWorkerDTO = workerService.convertToDTO(worker);
-            return ResponseEntity.ok(updatedWorkerDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-
 
     @GetMapping("/{id}")
     public ResponseEntity<WorkerDTO> getbyid(@PathVariable Long id) {

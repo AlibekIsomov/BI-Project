@@ -1,8 +1,8 @@
 package com.bim.inventory.service.Impl;
 
-import com.bim.inventory.dto.SalaryChangeDTO;
+import com.bim.inventory.dto.SalaryDTO;
 import com.bim.inventory.dto.WorkerDTO;
-import com.bim.inventory.entity.SalaryChange;
+import com.bim.inventory.entity.Salary;
 import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.WorkerRepository;
 import com.bim.inventory.service.WorkerService;
@@ -46,15 +46,7 @@ public class WorkerServiceImpl implements WorkerService {
         worker.setName(data.getName());
         worker.setSurname(data.getSurname());
         worker.setJobDescription(data.getJobDescription());
-        worker.setCurrentSalary(data.getCurrentSalary());
         // Create an initial salary change
-        SalaryChange initialSalaryChange = new SalaryChange();
-        initialSalaryChange.setNewSalary(worker.getCurrentSalary());
-        initialSalaryChange.setChangeDate(new Date());
-        initialSalaryChange.setWorker(worker);
-
-        // Add the initial salary change to the worker's list of salary changes
-        worker.getSalaryChanges().add(initialSalaryChange);
 
         return Optional.of(workerRepository.save(worker));
     }
@@ -109,7 +101,7 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setJobDescription(worker.getJobDescription());
         workerDTO.setCurrentSalary(worker.getCurrentSalary());
 
-        List<SalaryChangeDTO> salaryChangeDTOs = worker.getSalaryChanges()
+        List<SalaryDTO> salaryChangeDTOs = worker.getSalaryChanges()
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -118,8 +110,8 @@ public class WorkerServiceImpl implements WorkerService {
         return workerDTO;
     }
 
-    private SalaryChangeDTO convertToDTO(SalaryChange salaryChange) {
-        SalaryChangeDTO salaryChangeDTO = new SalaryChangeDTO();
+    private SalaryDTO convertToDTO(Salary salaryChange) {
+        SalaryDTO salaryChangeDTO = new SalaryDTO();
         salaryChangeDTO.setNewSalary(salaryChange.getNewSalary());
         salaryChangeDTO.setChangeDate(salaryChange.getChangeDate());
         return salaryChangeDTO;

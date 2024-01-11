@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-public class SalaryChange {
+public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +22,6 @@ public class SalaryChange {
     private Date changeDate;
 
     @ManyToOne
+    @JoinColumn(name = "store_id")
     private Worker worker;
 }

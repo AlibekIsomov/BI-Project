@@ -108,24 +108,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
 
-    @Override
-    public StoreDTO convertToDTO(Store store) {
-        StoreDTO storeDTO = new StoreDTO();
-        storeDTO.setId(store.getId());
-        storeDTO.setFullAmount(store.getFullAmount());
-        storeDTO.setContractNumber(store.getContractNumber());
-        storeDTO.setFullName(store.getFullName());
-        storeDTO.setSize(store.getSize());
-        storeDTO.setStoreNumber(store.getStoreNumber());
-
-        List<PaymentDTO> paymentDTOs = store.getPayments()
-                .stream()
-                .map(this::convertToPaymentDTO)
-                .collect(Collectors.toList());
-        storeDTO.setPayments(paymentDTOs);
-
-        return storeDTO;
-    }
 
 
 
@@ -169,7 +151,24 @@ public class PaymentServiceImpl implements PaymentService {
                 return ResponseEntity.notFound().build();
             }
         }
+    @Override
+    public StoreDTO convertToDTO(Store store) {
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setId(store.getId());
+        storeDTO.setFullAmount(store.getFullAmount());
+        storeDTO.setContractNumber(store.getContractNumber());
+        storeDTO.setFullName(store.getFullName());
+        storeDTO.setSize(store.getSize());
+        storeDTO.setStoreNumber(store.getStoreNumber());
 
+        List<PaymentDTO> paymentDTOs = store.getPayments()
+                .stream()
+                .map(this::convertToPaymentDTO)
+                .collect(Collectors.toList());
+        storeDTO.setPayments(paymentDTOs);
+
+        return storeDTO;
+    }
 
 
         private PaymentDTO convertToPaymentDTO(Payment payments) {
