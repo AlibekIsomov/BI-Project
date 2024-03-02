@@ -41,8 +41,8 @@ public class SwaggerConfig {
     }
 
     //for Swagger api doc generation
-    //http://localhost:8084/v2/api-docs
+    //http://localhost:8081/v2/api-docs
 
-//    http://localhost:8084/swagger-ui.html
+//    http://localhost:8081/swagger-ui.html
 }
 

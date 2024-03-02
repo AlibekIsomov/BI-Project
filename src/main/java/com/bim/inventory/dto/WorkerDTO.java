@@ -20,7 +20,6 @@ public class WorkerDTO {
 
   private String jobDescription;
 
-
-  private List<SalaryDTO> salaryChanges;
+  private Long FileEntityId;
 
 }

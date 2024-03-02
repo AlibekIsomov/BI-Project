@@ -1,6 +1,8 @@
 package com.bim.inventory.service;
 
+import com.bim.inventory.dto.MonthlySalaryDTO;
 import com.bim.inventory.dto.WorkerDTO;
+import com.bim.inventory.entity.MonthlySalary;
 import com.bim.inventory.entity.Worker;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +16,6 @@ public interface WorkerService extends CommonService<Worker,Long>{
 
     Page<Worker> getAllByNameAndSurnameContains(String name, String Surname, Pageable pageable);
 
-    WorkerDTO getbyid(Long workerId);
 
-    WorkerDTO convertToDTO(Worker worker);
+    Optional<MonthlySalary> createForSchedule(MonthlySalaryDTO data) throws Exception;
 }

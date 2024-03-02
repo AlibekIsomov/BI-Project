@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //                .antMatchers("/api/fayl").hasAnyAuthority("ADMIN","MANAGER")
 //                .antMatchers("/api/fayl/{id}").hasAnyAuthority("ADMIN","MANAGER")
-//                .antMatchers("/api/fayl/download/{id}").hasAnyAuthority("ADMIN","MANAGER")
+             .antMatchers("/api/fayl/download/{id}").permitAll()
 //                .antMatchers("/api/fayl/upload").hasAnyAuthority("ADMIN","MANAGER")
 //
 //

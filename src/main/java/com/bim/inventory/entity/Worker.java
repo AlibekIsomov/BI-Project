@@ -34,14 +34,14 @@ public class Worker {
     private String jobDescription;
 
 
-    private double currentSalary;
+    private Long currentSalary;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Salary> salaryChanges = new ArrayList<>();
+    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<MonthlySalary> monthlySalaries = new ArrayList<>();
 
-    @CreatedBy
-    private String createdBy;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "file_entity_id")
+    private FileEntity fileEntity;
 
     @CreatedDate
     private Instant createdAt;

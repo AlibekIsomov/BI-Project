@@ -1,7 +1,6 @@
 package com.bim.inventory.controller;
 
 import com.bim.inventory.dto.WorkerDTO;
-import com.bim.inventory.entity.Salary;
 import com.bim.inventory.entity.Worker;
 import com.bim.inventory.repository.WorkerRepository;
 import com.bim.inventory.service.WorkerService;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -25,9 +23,8 @@ public class WorkerController{
     WorkerRepository workerRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<WorkerDTO> getbyid(@PathVariable Long id) {
-        WorkerDTO workerHistory = workerService.getbyid(id);
-        return ResponseEntity.ok(workerHistory);
+    public ResponseEntity<Worker> getById(@PathVariable Long id) throws Exception {
+        return workerService.getById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 
