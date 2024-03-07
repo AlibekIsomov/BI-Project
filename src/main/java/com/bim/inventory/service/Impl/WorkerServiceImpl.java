@@ -83,17 +83,12 @@ public class WorkerServiceImpl implements WorkerService {
                     return Optional.empty();
                 }
 
+                if(oldFileEntity!=null) {
+                    fileRepository.delete(oldFileEntity);
+                }
                 // Set the new FileEntity
                 FileEntity newFileEntity = newFileEntityOptional.get();
                 worker.setFileEntity(newFileEntity);
-            } else {
-                // If fileId is not provided, remove the old FileEntity
-                if (oldFileEntity != null) {
-                    // Delete the old FileEntity from the repository
-                    fileRepository.delete(oldFileEntity);
-                    // Remove the old FileEntity from the Store
-                    worker.setFileEntity(null);
-                }
             }
 
 

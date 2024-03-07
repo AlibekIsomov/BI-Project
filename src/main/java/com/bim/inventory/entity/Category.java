@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -23,6 +25,9 @@ public class Category {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<FileEntity> fileEntity = new ArrayList<>();
 
     @CreatedBy
     private String createdBy;

@@ -4,6 +4,7 @@ package com.bim.inventory.service.Impl;
 import com.bim.inventory.dto.PaymentDTO;
 import com.bim.inventory.dto.StoreDTO;
 import com.bim.inventory.entity.Payment;
+import com.bim.inventory.entity.PaymentStatus;
 import com.bim.inventory.entity.Store;
 import com.bim.inventory.repository.PaymentRepository;
 import com.bim.inventory.repository.StoreRepository;
@@ -59,6 +60,7 @@ public class StoreServiceImpl implements StoreService {
         store.setFullName(data.getFullName());
         store.setStoreNumber(data.getStoreNumber());
         store.setInitialPayment(data.getInitialPayment());
+        store.setStatus(PaymentStatus.valueOf(data.getStatus()));
         store.setSize(data.getSize());
 
         return Optional.of(storeRepository.save(store));
@@ -81,6 +83,7 @@ public class StoreServiceImpl implements StoreService {
         storeToUpdate.setFullName(data.getFullName());
         storeToUpdate.setStoreNumber(data.getStoreNumber());
         storeToUpdate.setInitialPayment(data.getInitialPayment());
+        storeToUpdate.setStatus(PaymentStatus.valueOf(data.getStatus()));
         storeToUpdate.setSize(data.getSize());
 
 

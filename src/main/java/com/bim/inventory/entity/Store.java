@@ -39,6 +39,7 @@ public class Store {
 
     private double lastPayment;
 
+    private PaymentStatus status;
 
     @JsonIgnore
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)

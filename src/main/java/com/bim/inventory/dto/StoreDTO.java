@@ -29,6 +29,8 @@ public class StoreDTO {
 
     private double lastPayment;
 
+    private String status;
+
     private List<PaymentDTO> payments;
 
 }

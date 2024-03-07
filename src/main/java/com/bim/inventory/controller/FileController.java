@@ -122,7 +122,8 @@ public class FileController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         fileService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(" ID with " + id + " file deleted ");
+
     }
 
 
