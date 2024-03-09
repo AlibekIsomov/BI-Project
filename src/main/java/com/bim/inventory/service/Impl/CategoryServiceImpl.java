@@ -4,10 +4,7 @@ package com.bim.inventory.service.Impl;
 import com.bim.inventory.dto.CategoryDTO;
 import com.bim.inventory.entity.Category;
 import com.bim.inventory.entity.FileEntity;
-import com.bim.inventory.repository.CategoryRepository;
-import com.bim.inventory.repository.FileRepository;
-import com.bim.inventory.repository.InputItemRepository;
-import com.bim.inventory.repository.OutputItemRepository;
+import com.bim.inventory.repository.*;
 import com.bim.inventory.service.CategoryService;
 import javassist.NotFoundException;
 import org.slf4j.Logger;
@@ -29,10 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
     @Autowired
-    InputItemRepository inputItemRepository;
-
-    @Autowired
-    OutputItemRepository outputItemRepository;
+    StoreRepository storeRepository;
 
     @Autowired
     FileRepository fileRepository;
@@ -56,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Optional<Category> create(CategoryDTO data) throws Exception {
 
         Category category = new Category();
-        category.setName(data.getName());
+        category.setLocationName(data.getLocationName());
 
         return Optional.of(categoryRepository.save(category));
     }
@@ -93,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
             }
 
             // Update category name
-            category.setName(data.getName());
+            category.setLocationName(data.getLocationName());
 
             // Save the updated category
             return Optional.of(categoryRepository.save(category));
@@ -105,7 +99,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<Category> getAllByNameContains(String name, Pageable pageable) {
-        return categoryRepository.findAllByNameContains(name,pageable);
+        return categoryRepository.findAllByLocationName(name,pageable);
     }
 
     @Override
@@ -113,8 +107,7 @@ public class CategoryServiceImpl implements CategoryService {
         if(!categoryRepository.existsById(id)) {
             logger.info("Input with id " + id + " does not exists");
         }
-        outputItemRepository.deleteAll(outputItemRepository.findAllByCategoryId(id));
-        inputItemRepository.deleteAll(inputItemRepository.findAllByCategoryId(id));
+        storeRepository.deleteAll(storeRepository.findAllByCategoryId(id));
 
         categoryRepository.deleteById(id);
     }

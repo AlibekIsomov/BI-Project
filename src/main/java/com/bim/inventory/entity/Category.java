@@ -24,7 +24,7 @@ public class Category {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String locationName;
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<FileEntity> fileEntity = new ArrayList<>();

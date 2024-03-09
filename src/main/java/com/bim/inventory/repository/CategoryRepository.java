@@ -14,6 +14,6 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    Page<Category> findAllByNameContains(String name, Pageable pageable);
+    Page<Category> findAllByLocationName(String locationName, Pageable pageable);
 
 }

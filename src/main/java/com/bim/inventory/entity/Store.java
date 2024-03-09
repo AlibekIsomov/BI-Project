@@ -41,6 +41,13 @@ public class Store {
 
     private PaymentStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @OneToOne
+    private FileEntity fileEntity;
+
     @JsonIgnore
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Payment> payments = new ArrayList<>();

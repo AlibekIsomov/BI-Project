@@ -29,6 +29,10 @@ public class StoreDTO {
 
     private double lastPayment;
 
+    private Long categoryId;
+
+    private Long fileEntityId;
+
     private String status;
 
     private List<PaymentDTO> payments;

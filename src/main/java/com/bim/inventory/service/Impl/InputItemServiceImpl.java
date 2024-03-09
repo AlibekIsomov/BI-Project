@@ -2,7 +2,9 @@ package com.bim.inventory.service.Impl;
 
 import com.bim.inventory.dto.InputDTO;
 import com.bim.inventory.entity.Category;
+import com.bim.inventory.entity.CategoryItem;
 import com.bim.inventory.entity.InputItem;
+import com.bim.inventory.repository.CategoryItemRepository;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.repository.InputItemRepository;
 import com.bim.inventory.service.InputItemService;
@@ -25,7 +27,7 @@ public class InputItemServiceImpl implements InputItemService {
     InputItemRepository itemRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    CategoryItemRepository categoryItemRepository;
 
     @Override
     public Page<InputItem> getAll(Pageable pageable) throws Exception {
@@ -44,7 +46,7 @@ public class InputItemServiceImpl implements InputItemService {
 
     @Override
     public Optional<InputItem> create(InputDTO data) throws Exception {
-        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+        Optional<CategoryItem> optionalCategory = categoryItemRepository.findById(data.getCategoryItemId());
 
         if (!optionalCategory.isPresent()) {
             logger.info("Such ID category does not exist!");
@@ -55,7 +57,7 @@ public class InputItemServiceImpl implements InputItemService {
         item.setPrice(data.getPrice());
         item.setDescription(data.getDescription());
         item.setCount(data.getCount());
-        item.setCategory(optionalCategory.get());
+        item.setCategoryItem(optionalCategory.get());
 
         return Optional.of(itemRepository.save(item));
     }
@@ -69,7 +71,7 @@ public class InputItemServiceImpl implements InputItemService {
             return null;
         }
 
-        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+        Optional<CategoryItem> optionalCategory = categoryItemRepository.findById(data.getCategoryItemId());
 
         if (!optionalCategory.isPresent()) {
             logger.info("Such ID category does not exist!");
@@ -81,7 +83,7 @@ public class InputItemServiceImpl implements InputItemService {
         itemToUpdate.setPrice(data.getPrice());
         itemToUpdate.setDescription(data.getDescription());
         itemToUpdate.setCount(data.getCount());
-        itemToUpdate.setCategory(optionalCategory.get());
+        itemToUpdate.setCategoryItem(optionalCategory.get());
 
         return Optional.of(itemRepository.save(itemToUpdate));
     }

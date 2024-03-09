@@ -17,7 +17,7 @@ public interface OutputItemRepository extends JpaRepository<OutputItem, Long> {
 
     List<OutputItem> findByCreatedAtBetween(LocalDateTime fromDate, LocalDateTime toDate);
 
-    List<OutputItem> findAllByCategoryId(Long id);
+    List<OutputItem> findAllByCategoryItemId(Long id);
 
     List<OutputItem> findByCreatedAtBetween(Instant startDate, Instant endDate);
 

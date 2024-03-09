@@ -18,6 +18,6 @@ public class OutputDTO {
 
     private int count;
 
-    private Long categoryId;
+    private Long categoryItemId;
 
 }

@@ -20,6 +20,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findByCreatedAtBetween(Instant startDate, Instant endDate);
 
+    Iterable<? extends Store> findAllByCategoryId(Long id);
+
 //    Optional<Store> findByFullAmount();
 
 //    @Query("SELECT COALESCE(SUM(s.initialPayment) + SUM(s.newPayment), 0) FROM Store s WHERE s = :store")

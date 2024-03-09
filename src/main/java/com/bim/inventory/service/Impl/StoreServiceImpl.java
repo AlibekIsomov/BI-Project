@@ -3,9 +3,9 @@ package com.bim.inventory.service.Impl;
 
 import com.bim.inventory.dto.PaymentDTO;
 import com.bim.inventory.dto.StoreDTO;
-import com.bim.inventory.entity.Payment;
-import com.bim.inventory.entity.PaymentStatus;
-import com.bim.inventory.entity.Store;
+import com.bim.inventory.entity.*;
+import com.bim.inventory.repository.CategoryRepository;
+import com.bim.inventory.repository.FileRepository;
 import com.bim.inventory.repository.PaymentRepository;
 import com.bim.inventory.repository.StoreRepository;
 import com.bim.inventory.service.StoreService;
@@ -34,6 +34,12 @@ public class StoreServiceImpl implements StoreService {
     @Autowired
     PaymentRepository paymentRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    FileRepository fileRepository;
+
 
 
     @Override
@@ -53,6 +59,16 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Optional<Store> create(StoreDTO data) throws Exception {
+        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+
+        if (!optionalCategory.isPresent()) {
+            logger.info("Such ID category does not exist!");
+        }
+
+        Optional<FileEntity> optionalFileEntity = fileRepository.findById(data.getFileEntityId());
+        if (!optionalFileEntity.isPresent()) {
+            logger.info("Such ID category does not exist!");
+        }
 
         Store store = new Store();
         store.setFullAmount(data.getFullAmount());
@@ -62,6 +78,8 @@ public class StoreServiceImpl implements StoreService {
         store.setInitialPayment(data.getInitialPayment());
         store.setStatus(PaymentStatus.valueOf(data.getStatus()));
         store.setSize(data.getSize());
+        store.setCategory(optionalCategory.get());
+        store.setFileEntity(optionalFileEntity.get());
 
         return Optional.of(storeRepository.save(store));
     }
@@ -75,6 +93,16 @@ public class StoreServiceImpl implements StoreService {
             return Optional.empty();
         }
 
+        Optional<Category> optionalCategory = categoryRepository.findById(data.getCategoryId());
+
+        if (!optionalCategory.isPresent()) {
+            logger.info("Such ID category does not exist!");
+        }
+        Optional<FileEntity> optionalFileEntity = fileRepository.findById(data.getFileEntityId());
+
+        if (!optionalFileEntity.isPresent()) {
+            logger.info("Such ID file does not exist!");
+        }
 
         Store storeToUpdate = existingStore.get();
 
@@ -85,7 +113,8 @@ public class StoreServiceImpl implements StoreService {
         storeToUpdate.setInitialPayment(data.getInitialPayment());
         storeToUpdate.setStatus(PaymentStatus.valueOf(data.getStatus()));
         storeToUpdate.setSize(data.getSize());
-
+        storeToUpdate.setCategory(optionalCategory.get());
+        storeToUpdate.setFileEntity(optionalFileEntity.get());
 
         return Optional.of(storeRepository.save(storeToUpdate));
     }
@@ -110,134 +139,6 @@ public class StoreServiceImpl implements StoreService {
         return storeRepository.findByCreatedAtBetween(startDate, endDate);
 
     }
-
-
-
-//    @Override
-//    public List<Store> getByFullAmount(int fullAmount) {
-//        return storeRepository.findByFullAmount();
-//    }
-
-
-    private List<Payment> getPaymentsByStore(Store store) {
-        return paymentRepository.findByStore(store);
-    }
-
-//        public ResponseEntity<StoreDTO> addPayment(Long storeId, double newPayment) {
-//            Optional<Store> storeOptional = storeRepository.findById(storeId);
-//
-//            if (storeOptional.isPresent()) {
-//                Store store = storeOptional.get();
-//
-//                // Create a new payment record for the new payment
-//                Payment payment = new Payment();
-//                payment.setNewPayment(newPayment);
-//                payment.setStore(store);
-//
-//                // Add the new payment to the store's list of payments
-//                store.getPayments().add(payment);
-//
-//                // Update the store's lastPayment to the new payment
-//                store.setLastPayment(newPayment);
-//
-//                // Save the updated store (including the new payment)
-//                storeRepository.save(store);
-//
-//                // Convert and return the updated store as a DTO
-//                StoreDTO updatedStoreDTO = convertToDTO(store);
-//                return ResponseEntity.ok(updatedStoreDTO);
-//            } else {
-//                return ResponseEntity.notFound().build();
-//            }
-//        }
-//
-//
-//    @Override
-//    public ResponseEntity<StoreDTO> updatePayment(Long storeId, Long paymentId, double newPayment) {
-//        Optional<Store> storeOptional = storeRepository.findById(storeId);
-//
-//        if (storeOptional.isPresent()) {
-//            Store store = storeOptional.get();
-//
-//            // Find the existing payment by ID
-//            Optional<Payment> paymentOptional = store.getPayments().stream()
-//                    .filter(payment -> payment.getId().equals(paymentId))
-//                    .findFirst();
-//
-//            if (paymentOptional.isPresent()) {
-//                Payment existingPayment = paymentOptional.get();
-//
-//                // Update the existing payment
-//                existingPayment.setNewPayment(newPayment);
-//
-//                // Update the store's lastPayment to the new payment
-//                store.setLastPayment(newPayment);
-//
-//                // Save the updated store (including the updated payment)
-//                storeRepository.save(store);
-//
-//                // Convert and return the updated store as a DTO
-//                StoreDTO updatedStoreDTO = convertToDTO(store);
-//                return ResponseEntity.ok(updatedStoreDTO);
-//            } else {
-//                // Handle the case where the specified payment ID is not found
-//                return ResponseEntity.notFound().build();
-//            }
-//        } else {
-//            // Handle the case where the specified store ID is not found
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//
-//        @Override
-//        public double calculateTotalPaymentsByStore (Long storeId){
-//            Store store = storeRepository.findById(storeId)
-//                    .orElseThrow(() -> new EntityNotFoundException("Store not found with id: " + storeId));
-//
-//            return paymentRepository.calculateTotalPaymentsByStore(store);
-//        }
-//
-//
-//    @Override
-//    public StoreDTO convertToDTO(Store store) {
-//        StoreDTO storeDTO = new StoreDTO();
-//        storeDTO.setId(store.getId());
-//        storeDTO.setFullAmount(store.getFullAmount());
-//        storeDTO.setContractNumber(store.getContractNumber());
-//        storeDTO.setFullName(store.getFullName());
-//        storeDTO.setSize(store.getSize());
-//        storeDTO.setStoreNumber(store.getStoreNumber());
-//
-//        List<PaymentDTO> paymentDTOs = store.getPayments()
-//                .stream()
-//                .map(this::convertToPaymentDTO)
-//                .collect(Collectors.toList());
-//        storeDTO.setPayments(paymentDTOs);
-//
-//        return storeDTO;
-//    }
-//
-//    @Override
-//    public double releasePaidAmount(Long storeId,int fullAmount) {
-//
-//        double totalPayments = calculateTotalPaymentsByStore(storeId);
-//        double remainingAmount = Math.max(fullAmount - totalPayments, 0);
-//
-//        return remainingAmount;
-//    }
-//
-//
-//    private PaymentDTO convertToPaymentDTO(Payment payments) {
-//        PaymentDTO paymentDTO = new PaymentDTO();
-//        paymentDTO.setId(payments.getId());
-//        paymentDTO.setNewPayment(payments.getNewPayment());
-//        return paymentDTO;
-//    }
-
-//    protected int GetFullAmount(Store store){
-//    int xa = store.getFullAmount();
-//        return  xa;
-//    }
 
 
 }

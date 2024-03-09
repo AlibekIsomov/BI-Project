@@ -17,6 +17,6 @@ public interface InputItemRepository extends JpaRepository<InputItem, Long> {
 
     List<InputItem> findByCreatedAtBetween(Instant startDate, Instant endDate);
 
-    List<InputItem> findAllByCategoryId(Long id);
+    List<InputItem> findAllByCategoryItemId(Long id);
 
 }

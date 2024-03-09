@@ -18,6 +18,6 @@ public class InputDTO {
 
     private int count;
 
-    private Long categoryId;
+    private Long categoryItemId;
 
 }

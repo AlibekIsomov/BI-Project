@@ -32,8 +32,8 @@ public class InputItem{
     private int count;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "categoryItem_id", nullable = false)
+    private CategoryItem categoryItem;
 
     @CreatedBy
     private String createdBy;

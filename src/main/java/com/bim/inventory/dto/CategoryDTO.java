@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDTO {
-    private String name;
+    private String locationName;
 
     private List<Long> FileEntityIds;
 }
