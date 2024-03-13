@@ -18,4 +18,5 @@ public interface CategoryService extends CommonService<Category, Long> {
     Page<Category> getAllByNameContains(String name, Pageable pageable);
 
 
+    void deleteFileEntity(Long categoryId, Long fileEntityId);
 }

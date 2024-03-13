@@ -2,6 +2,7 @@ package com.bim.inventory.controller;
 
 import com.bim.inventory.dto.CategoryDTO;
 import com.bim.inventory.entity.Category;
+import com.bim.inventory.entity.Payment;
 import com.bim.inventory.repository.CategoryRepository;
 import com.bim.inventory.service.CategoryService;
 
@@ -80,5 +81,15 @@ public class CategoryController  {
     public ResponseEntity<Page<Category>> searchName(@PathVariable String name, Pageable pageable) {
         return ResponseEntity.ok(categoryService.getAllByNameContains(name,pageable));
         }
+
+
+    @DeleteMapping("/{categoryId}/deleteFile/{fileEntityId}")
+    public void deleteFile(
+            @PathVariable Long categoryId,
+            @PathVariable Long fileEntityId
+    ) {
+        categoryService.deleteFileEntity(categoryId, fileEntityId);
+    }
+
     }
 

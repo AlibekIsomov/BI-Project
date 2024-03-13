@@ -26,6 +26,7 @@ public interface StoreService {
     Page<Store> getAllByStoreNumberContains(int storeNumber, Pageable pageable);
 
     List<Store> findItemsWithinDateRange(Instant startDate, Instant endDate);
+
 //    List<Store> getByFullAmount(int fullAmount);
 
 

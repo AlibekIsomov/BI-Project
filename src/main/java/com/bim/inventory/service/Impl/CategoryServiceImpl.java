@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -110,6 +112,29 @@ public class CategoryServiceImpl implements CategoryService {
         storeRepository.deleteAll(storeRepository.findAllByCategoryId(id));
 
         categoryRepository.deleteById(id);
+    }
+
+
+    @Override
+    public void deleteFileEntity(Long categoryId, Long fileEntityId) {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            List<FileEntity> fileEntities = category.getFileEntity();
+
+            // Find the FileEntity to delete
+            Optional<FileEntity> fileEntityOptional = fileEntities.stream()
+                    .filter(fileEntity -> fileEntity.getId().equals(fileEntityId))
+                    .findFirst();
+
+            // If found, remove it from the list
+            fileEntityOptional.ifPresent(fileEntity -> {
+                fileEntities.remove(fileEntity);
+                categoryRepository.save(category); // Update the category entity in the database
+            });
+        } else {
+            logger.info(id + " does not exists");
+        }
     }
 
 }
