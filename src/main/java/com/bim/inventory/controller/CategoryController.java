@@ -86,8 +86,7 @@ public class CategoryController  {
     @DeleteMapping("/{categoryId}/deleteFile/{fileEntityId}")
     public void deleteFile(
             @PathVariable Long categoryId,
-            @PathVariable Long fileEntityId
-    ) {
+            @PathVariable Long fileEntityId) {
         categoryService.deleteFileEntity(categoryId, fileEntityId);
     }
 

@@ -42,11 +42,7 @@ public class StoreController {
         try {
             Optional<Store> createdCategory = storeService.create(data);
 
-            if (createdCategory.isPresent()) {
-                return ResponseEntity.ok(createdCategory.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return createdCategory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -57,11 +53,7 @@ public class StoreController {
         try {
             Optional<Store> updatedStore = storeService.update(id, data);
 
-            if (updatedStore.isPresent()) {
-                return ResponseEntity.ok(updatedStore.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return updatedStore.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (NoSuchElementException storeNotFoundException) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {

@@ -63,21 +63,16 @@ public class StoreServiceImpl implements StoreService {
             logger.info("Such ID category does not exist!");
         }
 
-        Optional<FileEntity> optionalFileEntity = fileRepository.findById(data.getFileEntityId());
-        if (!optionalFileEntity.isPresent()) {
-            logger.info("Such ID file does not exist!");
-        }
+
 
         Store store = new Store();
         store.setFullAmount(data.getFullAmount());
         store.setContractNumber(data.getContractNumber());
         store.setFullName(data.getFullName());
-        store.setStoreNumber(data.getStoreNumber());
         store.setInitialPayment(data.getInitialPayment());
         store.setStatus(PaymentStatus.valueOf(data.getStatus()));
         store.setSize(data.getSize());
         store.setCategory(optionalCategory.get());
-        store.setFileEntity(optionalFileEntity.get());
 
         return Optional.of(storeRepository.save(store));
     }
@@ -104,7 +99,6 @@ public class StoreServiceImpl implements StoreService {
 
         Store storeToUpdate = existingStore.get();
 
-        storeToUpdate.setFullAmount(data.getFullAmount());
         storeToUpdate.setContractNumber(data.getContractNumber());
         storeToUpdate.setFullName(data.getFullName());
         storeToUpdate.setStoreNumber(data.getStoreNumber());

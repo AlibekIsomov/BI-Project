@@ -28,7 +28,7 @@ public class Store {
 
     private int contractNumber;
 
-    private String FullName;
+    private String fullName;
 
     private int storeNumber;
 
