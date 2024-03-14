@@ -89,7 +89,7 @@ public class CategoryController  {
             @PathVariable Long fileEntityId) {
         categoryService.deleteFileEntity(categoryId, fileEntityId);
 
-        return ResponseEntity.ok().body(" ID with " + categoryId + " category's file deleted ");
+        return ResponseEntity.ok().body( categoryId );
     }
 
     }
