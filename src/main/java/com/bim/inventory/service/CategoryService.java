@@ -19,4 +19,6 @@ public interface CategoryService extends CommonService<Category, Long> {
 
 
     void deleteFileEntity(Long categoryId, Long fileEntityId);
+
+    Optional<Category> findById(Long categoryId);
 }

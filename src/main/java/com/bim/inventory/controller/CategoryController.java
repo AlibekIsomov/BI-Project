@@ -88,8 +88,15 @@ public class CategoryController  {
             @PathVariable Long categoryId,
             @PathVariable Long fileEntityId) {
         categoryService.deleteFileEntity(categoryId, fileEntityId);
+        Optional<Category> optionalCategory = categoryService.findById(categoryId);
 
-        return ResponseEntity.ok().body( categoryId );
+        if (optionalCategory.isPresent()) {
+            Category category = optionalCategory.get();
+            return ResponseEntity.ok().body(category);
+        } else {
+            // If category is not found, return 404 Not Found
+            return ResponseEntity.notFound().build();
+        }
     }
 
     }
