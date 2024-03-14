@@ -71,6 +71,7 @@ public class StoreServiceImpl implements StoreService {
         store.setFullName(data.getFullName());
         store.setInitialPayment(data.getInitialPayment());
         store.setStatus(PaymentStatus.valueOf(data.getStatus()));
+        store.setStoreNumber(data.getStoreNumber());
         store.setSize(data.getSize());
         store.setCategory(optionalCategory.get());
 
@@ -91,13 +92,32 @@ public class StoreServiceImpl implements StoreService {
         if (!optionalCategory.isPresent()) {
             logger.info("Such ID category does not exist!");
         }
-        Optional<FileEntity> optionalFileEntity = fileRepository.findById(data.getFileEntityId());
+        Store storeToUpdate = existingStore.get();
 
-        if (!optionalFileEntity.isPresent()) {
-            logger.info("Such ID file does not exist!");
+        FileEntity oldFileEntity = storeToUpdate.getFileEntity();
+
+        // Check if fileId is provided before removing the FileEntity
+        if (data.getFileEntityId() != null) {
+            Optional<FileEntity> newFileEntityOptional = fileRepository.findById(data.getFileEntityId());
+
+            if (!newFileEntityOptional.isPresent()) {
+                logger.info("FileEntity with id " + data.getFileEntityId() + " does not exist");
+                return Optional.empty();
+            }
+
+            // Set the new FileEntity
+            FileEntity newFileEntity = newFileEntityOptional.get();
+            storeToUpdate.setFileEntity(newFileEntity);
+        } else {
+            // If fileId is not provided, remove the old FileEntity
+            if (oldFileEntity != null) {
+                // Delete the old FileEntity from the repository
+                fileRepository.delete(oldFileEntity);
+                // Remove the old FileEntity from the Store
+                storeToUpdate.setFileEntity(null);
+            }
         }
 
-        Store storeToUpdate = existingStore.get();
 
         storeToUpdate.setContractNumber(data.getContractNumber());
         storeToUpdate.setFullName(data.getFullName());
@@ -105,8 +125,8 @@ public class StoreServiceImpl implements StoreService {
         storeToUpdate.setInitialPayment(data.getInitialPayment());
         storeToUpdate.setStatus(PaymentStatus.valueOf(data.getStatus()));
         storeToUpdate.setSize(data.getSize());
+        storeToUpdate.setStoreNumber(data.getStoreNumber());
         storeToUpdate.setCategory(optionalCategory.get());
-        storeToUpdate.setFileEntity(optionalFileEntity.get());
 
         return Optional.of(storeRepository.save(storeToUpdate));
     }
