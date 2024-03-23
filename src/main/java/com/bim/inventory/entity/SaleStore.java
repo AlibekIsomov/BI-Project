@@ -1,6 +1,8 @@
 package com.bim.inventory.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,23 +12,39 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Payment {
+public class SaleStore {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Long fullAmount;
 
-    private Long newPayment;
+    @Column(name = "initialPayment")
+    private Long initialPayment;
 
-    @ManyToOne
+    @Column(nullable = true)
+    private Long lastPayment;
+
+
+    @OneToOne
     @JoinColumn(name = "store_id")
-    private SaleStore saleStore;
+    private Store store;
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "saleStore", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Payment> payments = new ArrayList<>();
 
     @CreatedBy
     private String createdBy;

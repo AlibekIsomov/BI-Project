@@ -1,6 +1,7 @@
 package com.bim.inventory.repository;
 
 import com.bim.inventory.entity.Payment;
+import com.bim.inventory.entity.SaleStore;
 import com.bim.inventory.entity.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,13 +13,9 @@ import java.util.List;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment , Long> {
-    List<Payment> findByStore(Store store);
+    List<Payment> findBySaleStore(SaleStore saleStore);
 
-    @Query("SELECT s.initialPayment + COALESCE((SELECT SUM(p.newPayment) FROM Payment p WHERE p.store = :store), 0) FROM Store s WHERE s = :store")
-    int calculateTotalPaymentsByStore(@Param("store") Store store);
-
-
-
-
+    @Query("SELECT s.initialPayment + COALESCE((SELECT SUM(p.newPayment) FROM Payment p WHERE p.saleStore = :saleStore), 0) FROM SaleStore s WHERE s = :saleStore")
+    int calculateTotalPaymentsBySaleStore(@Param("saleStore") SaleStore saleStore);
 }
 

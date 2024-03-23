@@ -35,6 +35,4 @@ public class StoreDTO {
 
     private String status;
 
-    private List<PaymentDTO> payments;
-
 }

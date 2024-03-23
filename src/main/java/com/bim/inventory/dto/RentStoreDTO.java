@@ -1,22 +1,24 @@
 package com.bim.inventory.dto;
 
 
+import com.bim.inventory.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.time.Instant;
+import java.math.BigDecimal;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentDTO {
-
+public class RentStoreDTO {
     private Long id;
 
-    private Long newPayment;
+    private BigDecimal PaymentAmount;
 
-    private Instant createdAt;
+    private Long expiryMonth;
+
+    private Long StoreId;
 
 }

@@ -48,10 +48,6 @@ public class Store {
     @OneToOne
     private FileEntity fileEntity;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Payment> payments = new ArrayList<>();
-
     @CreatedBy
     private String createdBy;
 

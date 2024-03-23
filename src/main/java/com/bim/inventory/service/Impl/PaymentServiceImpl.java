@@ -2,10 +2,13 @@ package com.bim.inventory.service.Impl;
 
 
 import com.bim.inventory.dto.PaymentDTO;
+import com.bim.inventory.dto.SaleStoreDTO;
 import com.bim.inventory.dto.StoreDTO;
 import com.bim.inventory.entity.Payment;
+import com.bim.inventory.entity.SaleStore;
 import com.bim.inventory.entity.Store;
 import com.bim.inventory.repository.PaymentRepository;
+import com.bim.inventory.repository.SaleStoreRepository;
 import com.bim.inventory.repository.StoreRepository;
 import com.bim.inventory.service.PaymentService;
 import org.slf4j.Logger;
@@ -27,15 +30,15 @@ public class PaymentServiceImpl implements PaymentService {
     PaymentRepository paymentRepository;
 
     @Autowired
-    StoreRepository storeRepository;
+    SaleStoreRepository storeRepository;
 
 
     @Override
-    public ResponseEntity<Payment> addPayment(Long storeId, double newPayment) {
-        Optional<Store> storeOptional = storeRepository.findById(storeId);
+    public ResponseEntity<Payment> addPayment(Long storeId, Long newPayment) {
+        Optional<SaleStore> storeOptional = storeRepository.findById(storeId);
 
         if (storeOptional.isPresent()) {
-            Store store = storeOptional.get();
+            SaleStore store = storeOptional.get();
 
             // Check if the new payment is greater than or equal to the full amount
             if (newPayment > store.getFullAmount() || calculateTotalPaymentsByStore(storeId) >= store.getFullAmount()) {
@@ -45,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
             // Create a new payment record for the new payment
             Payment payment = new Payment();
             payment.setNewPayment(newPayment);
-            payment.setStore(store);
+            payment.setSaleStore(store);
 
             // Add the new payment to the store's list of payments
             store.getPayments().add(payment);
@@ -64,11 +67,11 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public ResponseEntity<Payment> updatePayment(Long storeId, Long paymentId, double newPayment) {
-        Optional<Store> storeOptional = storeRepository.findById(storeId);
+    public ResponseEntity<Payment> updatePayment(Long storeId, Long paymentId, Long newPayment) {
+        Optional<SaleStore> storeOptional = storeRepository.findById(storeId);
 
         if (storeOptional.isPresent()) {
-            Store store = storeOptional.get();
+            SaleStore store = storeOptional.get();
 
             // Find the existing payment by ID
             Optional<Payment> paymentOptional = store.getPayments().stream()
@@ -100,11 +103,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public double calculateTotalPaymentsByStore(Long storeId){
-        Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new EntityNotFoundException("Store not found with id: " + storeId));
+    public double calculateTotalPaymentsByStore(Long saleStoreId){
+        SaleStore saleStore = storeRepository.findById(saleStoreId)
+                .orElseThrow(() -> new EntityNotFoundException("Store not found with id: " + saleStoreId));
 
-        return paymentRepository.calculateTotalPaymentsByStore(store);
+        return paymentRepository.calculateTotalPaymentsBySaleStore(saleStore);
     }
 
 
@@ -119,7 +122,7 @@ public class PaymentServiceImpl implements PaymentService {
             Payment paymentToDelete = paymentOptional.get();
 
             // Remove the payment from the associated store's payments list
-            Store store = paymentToDelete.getStore();
+            SaleStore store = paymentToDelete.getSaleStore();
             if (store != null) {
                 store.getPayments().remove(paymentToDelete);
             }
@@ -136,10 +139,10 @@ public class PaymentServiceImpl implements PaymentService {
 
         @Override
         public ResponseEntity<List<PaymentDTO>> getAllPayments (Long storeId){
-            Optional<Store> storeOptional = storeRepository.findById(storeId);
+            Optional<SaleStore> storeOptional = storeRepository.findById(storeId);
 
             if (storeOptional.isPresent()) {
-                Store store = storeOptional.get();
+                SaleStore store = storeOptional.get();
 
                 List<PaymentDTO> paymentDTOs = store.getPayments()
                         .stream()
@@ -152,22 +155,18 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
     @Override
-    public StoreDTO convertToDTO(Store store) {
-        StoreDTO storeDTO = new StoreDTO();
-        storeDTO.setId(store.getId());
-        storeDTO.setFullAmount(store.getFullAmount());
-        storeDTO.setContractNumber(store.getContractNumber());
-        storeDTO.setFullName(store.getFullName());
-        storeDTO.setSize(store.getSize());
-        storeDTO.setStoreNumber(store.getStoreNumber());
+    public SaleStoreDTO convertToDTO(SaleStore saleStore) {
+        SaleStoreDTO saleStoreDTO = new SaleStoreDTO();
+        saleStoreDTO.setId(saleStore.getId());
+        saleStoreDTO.setFullAmount(saleStore.getFullAmount());
 
-        List<PaymentDTO> paymentDTOs = store.getPayments()
+        List<PaymentDTO> paymentDTOs = saleStore.getPayments()
                 .stream()
                 .map(this::convertToPaymentDTO)
                 .collect(Collectors.toList());
-        storeDTO.setPayments(paymentDTOs);
+        saleStoreDTO.setPayments(paymentDTOs);
 
-        return storeDTO;
+        return saleStoreDTO;
     }
 
 
