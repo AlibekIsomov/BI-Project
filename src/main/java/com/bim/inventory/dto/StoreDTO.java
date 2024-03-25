@@ -15,15 +15,11 @@ import java.util.List;
 public class StoreDTO {
     private Long id;
 
-    private int fullAmount;
-
     private int contractNumber;
 
     private String fullName;
 
     private int storeNumber;
-
-    private int initialPayment;
 
     private double size;
 

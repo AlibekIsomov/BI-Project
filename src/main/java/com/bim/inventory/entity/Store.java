@@ -28,12 +28,7 @@ public class Store {
 
     private int contractNumber;
 
-    private String fullName;
-
     private int storeNumber;
-
-    @Column(name = "initialPayment")
-    private int initialPayment;
 
     private double size;
 

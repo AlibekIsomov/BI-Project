@@ -3,10 +3,7 @@ package com.bim.inventory.service.Impl;
 
 import com.bim.inventory.dto.StoreDTO;
 import com.bim.inventory.entity.*;
-import com.bim.inventory.repository.CategoryRepository;
-import com.bim.inventory.repository.FileRepository;
-import com.bim.inventory.repository.PaymentRepository;
-import com.bim.inventory.repository.StoreRepository;
+import com.bim.inventory.repository.*;
 import com.bim.inventory.service.StoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +16,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @Service
 public class StoreServiceImpl implements StoreService {
 
@@ -28,6 +23,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Autowired
     StoreRepository storeRepository;
+
+    @Autowired
+    RentStoreRepository rentStoreRepository;
+
+    @Autowired
+    SaleStoreRepository saleStoreRepository;
 
     @Autowired
     PaymentRepository paymentRepository;
@@ -66,10 +67,7 @@ public class StoreServiceImpl implements StoreService {
 
 
         Store store = new Store();
-        store.setFullAmount(data.getFullAmount());
         store.setContractNumber(data.getContractNumber());
-        store.setFullName(data.getFullName());
-        store.setInitialPayment(data.getInitialPayment());
         store.setStatus(PaymentStatus.valueOf(data.getStatus()));
         store.setStoreNumber(data.getStoreNumber());
         store.setSize(data.getSize());
@@ -120,9 +118,7 @@ public class StoreServiceImpl implements StoreService {
 
 
         storeToUpdate.setContractNumber(data.getContractNumber());
-        storeToUpdate.setFullName(data.getFullName());
         storeToUpdate.setStoreNumber(data.getStoreNumber());
-        storeToUpdate.setInitialPayment(data.getInitialPayment());
         storeToUpdate.setStatus(PaymentStatus.valueOf(data.getStatus()));
         storeToUpdate.setSize(data.getSize());
         storeToUpdate.setStoreNumber(data.getStoreNumber());
@@ -136,6 +132,10 @@ public class StoreServiceImpl implements StoreService {
         if(!storeRepository.existsById(id)) {
             logger.info("Store with id " + id + " does not exists");
         }
+
+        saleStoreRepository.deleteAll(saleStoreRepository.findAllByStoreId(id));
+        rentStoreRepository.deleteAll(rentStoreRepository.findAllByStoreId(id));
+
         storeRepository.deleteById(id);
     }
 
@@ -150,6 +150,11 @@ public class StoreServiceImpl implements StoreService {
     public List<Store> findItemsWithinDateRange(Instant startDate, Instant endDate) {
         return storeRepository.findByCreatedAtBetween(startDate, endDate);
 
+    }
+
+    @Override
+    public boolean isStoreConnected(Long storeId) {
+        return saleStoreRepository.existsByStoreId(storeId) || rentStoreRepository.existsByStoreId(storeId);
     }
 
 

@@ -3,16 +3,11 @@ package com.bim.inventory.service.Impl;
 
 import com.bim.inventory.dto.PaymentDTO;
 import com.bim.inventory.dto.SaleStoreDTO;
-import com.bim.inventory.dto.StoreDTO;
 import com.bim.inventory.entity.Payment;
 import com.bim.inventory.entity.SaleStore;
-import com.bim.inventory.entity.Store;
 import com.bim.inventory.repository.PaymentRepository;
 import com.bim.inventory.repository.SaleStoreRepository;
-import com.bim.inventory.repository.StoreRepository;
 import com.bim.inventory.service.PaymentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,26 +33,26 @@ public class PaymentServiceImpl implements PaymentService {
         Optional<SaleStore> storeOptional = storeRepository.findById(saleStoreId);
 
         if (storeOptional.isPresent()) {
-            SaleStore store = storeOptional.get();
+            SaleStore saleStore = storeOptional.get();
 
             // Check if the new payment is greater than or equal to the full amount
-            if (newPayment > store.getFullAmount() || calculateTotalPaymentsByStore(saleStoreId) >= store.getFullAmount()) {
+            if (newPayment > saleStore.getFullAmount() || calculateTotalPaymentsByStore(saleStoreId) >= saleStore.getFullAmount()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
             }
 
             // Create a new payment record for the new payment
             Payment payment = new Payment();
             payment.setNewPayment(newPayment);
-            payment.setSaleStore(store);
+            payment.setSaleStore(saleStore);
 
             // Add the new payment to the store's list of payments
-            store.getPayments().add(payment);
+            saleStore.getPayments().add(payment);
 
             // Update the store's lastPayment to the new payment
-            store.setLastPayment(newPayment);
+            saleStore.setLastPayment(newPayment);
 
             // Save the updated store (including the new payment)
-            storeRepository.save(store);
+            storeRepository.save(saleStore);
 
             return ResponseEntity.ok(payment);
         } else {
@@ -68,13 +63,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public ResponseEntity<Payment> updatePayment(Long saleStoreId, Long paymentId, Long newPayment) {
-        Optional<SaleStore> storeOptional = storeRepository.findById(saleStoreId    );
+        Optional<SaleStore> storeOptional = storeRepository.findById(saleStoreId);
 
         if (storeOptional.isPresent()) {
-            SaleStore store = storeOptional.get();
+            SaleStore saleStore = storeOptional.get();
 
             // Find the existing payment by ID
-            Optional<Payment> paymentOptional = store.getPayments().stream()
+            Optional<Payment> paymentOptional = saleStore.getPayments().stream()
                     .filter(payment -> payment.getId().equals(paymentId))
                     .findFirst();
 
@@ -85,10 +80,10 @@ public class PaymentServiceImpl implements PaymentService {
                 existingPayment.setNewPayment(newPayment);
 
                 // Update the store's lastPayment to the new payment
-                store.setLastPayment(newPayment);
+                saleStore.setLastPayment(newPayment);
 
                 // Save the updated store (including the updated payment)
-                storeRepository.save(store);
+                storeRepository.save(saleStore);
 
                 // Convert and return the updated store as a DTO
                 return ResponseEntity.ok(existingPayment);
@@ -107,7 +102,7 @@ public class PaymentServiceImpl implements PaymentService {
         SaleStore saleStore = storeRepository.findById(saleStoreId)
                 .orElseThrow(() -> new EntityNotFoundException("Store not found with id: " + saleStoreId));
 
-        return paymentRepository.calculateTotalPaymentsBySaleStore(saleStore);
+        return paymentRepository.calculateTotalPaymentsByStore(saleStore);
     }
 
 
@@ -138,8 +133,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
         @Override
-        public ResponseEntity<List<PaymentDTO>> getAllPayments (Long storeId){
-            Optional<SaleStore> storeOptional = storeRepository.findById(storeId);
+        public ResponseEntity<List<PaymentDTO>> getAllPayments (Long saleStoreId){
+            Optional<SaleStore> storeOptional = storeRepository.findById(saleStoreId);
 
             if (storeOptional.isPresent()) {
                 SaleStore store = storeOptional.get();

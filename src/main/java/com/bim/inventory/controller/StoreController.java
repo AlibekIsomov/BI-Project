@@ -71,5 +71,15 @@ public class StoreController {
         return ResponseEntity.ok(storeService.getAllByStoreNumberContains(storeNumber, pageable));
     }
 
+    @GetMapping("/{storeId}/checkConnection")
+    public ResponseEntity<String> checkStoreConnection(@PathVariable Long storeId) {
+        boolean isConnected = storeService.isStoreConnected(storeId);
+        if (isConnected) {
+            return ResponseEntity.ok("Store is connected to either SaleStore or RentStore");
+        } else {
+            return ResponseEntity.ok("Store is not connected to either SaleStore or RentStore");
+        }
+    }
+
 
 }

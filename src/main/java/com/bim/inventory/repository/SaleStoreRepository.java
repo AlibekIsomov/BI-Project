@@ -18,6 +18,8 @@ public interface SaleStoreRepository extends JpaRepository<SaleStore, Long> {
 
     Iterable<? extends SaleStore> findAllByStoreId(Long id);
 
+    boolean existsByStoreId(Long storeId);
+
 //    Optional<Store> findByFullAmount();
 
 //    @Query("SELECT COALESCE(SUM(s.initialPayment) + SUM(s.newPayment), 0) FROM Store s WHERE s = :store")

@@ -14,9 +14,9 @@ import java.util.List;
 public interface PaymentService {
 
 
-    ResponseEntity<Payment> addPayment(Long storeId, Long newPayment);
+    ResponseEntity<Payment> addPayment(Long saleStoreId, Long newPayment);
 
-    ResponseEntity<Payment> updatePayment(Long storeId, Long paymentId, Long newPayment);
+    ResponseEntity<Payment> updatePayment(Long saleStoreId, Long paymentId, Long newPayment);
 
     double calculateTotalPaymentsByStore(Long saleStoreId);
 

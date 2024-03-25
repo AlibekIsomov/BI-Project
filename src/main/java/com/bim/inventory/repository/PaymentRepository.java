@@ -13,9 +13,9 @@ import java.util.List;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment , Long> {
-    List<Payment> findBySaleStore(SaleStore saleStore);
+
 
     @Query("SELECT s.initialPayment + COALESCE((SELECT SUM(p.newPayment) FROM Payment p WHERE p.saleStore = :saleStore), 0) FROM SaleStore s WHERE s = :saleStore")
-    int calculateTotalPaymentsBySaleStore(@Param("saleStore") SaleStore saleStore);
+    int calculateTotalPaymentsByStore(@Param("saleStore") SaleStore saleStore);
 }
 

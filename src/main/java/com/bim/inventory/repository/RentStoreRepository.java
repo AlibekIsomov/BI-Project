@@ -15,4 +15,6 @@ public interface RentStoreRepository extends JpaRepository<RentStore , Long> {
     List<RentStore> findByCreatedAtBetween(Instant startDate, Instant endDate);
 
     Iterable<? extends RentStore> findAllByStoreId(Long id);
+
+    boolean existsByStoreId(Long storeId);
 }

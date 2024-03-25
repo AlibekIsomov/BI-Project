@@ -23,7 +23,7 @@ public class PaymentController {
 
 
     @GetMapping("/total/{saleStoreId}")
-    public ResponseEntity<Double> getTotalPaymentsByStore(@PathVariable Long saleStoreId) {
+        public ResponseEntity<Double> getTotalPaymentsByStore(@PathVariable Long saleStoreId) {
         double totalPayments = paymentService.calculateTotalPaymentsByStore(saleStoreId);
         return ResponseEntity.ok(totalPayments);
     }

@@ -35,11 +35,9 @@ public class SaleStore {
     @Column(nullable = true)
     private Long lastPayment;
 
-
     @OneToOne
     @JoinColumn(name = "store_id")
     private Store store;
-
 
     @JsonIgnore
     @OneToMany(mappedBy = "saleStore", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

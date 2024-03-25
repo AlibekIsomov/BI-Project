@@ -27,6 +27,8 @@ public interface StoreService {
 
     List<Store> findItemsWithinDateRange(Instant startDate, Instant endDate);
 
+    boolean isStoreConnected(Long storeId);
+
 //    List<Store> getByFullAmount(int fullAmount);
 
 
