@@ -1,6 +1,7 @@
 package com.bim.inventory.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +22,11 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private Long newPayment;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "sale_store_id")
+    @JsonManagedReference
     private SaleStore saleStore;
 
     @CreatedBy

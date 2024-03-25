@@ -34,14 +34,14 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public ResponseEntity<Payment> addPayment(Long storeId, Long newPayment) {
-        Optional<SaleStore> storeOptional = storeRepository.findById(storeId);
+    public ResponseEntity<Payment> addPayment(Long saleStoreId, Long newPayment) {
+        Optional<SaleStore> storeOptional = storeRepository.findById(saleStoreId);
 
         if (storeOptional.isPresent()) {
             SaleStore store = storeOptional.get();
 
             // Check if the new payment is greater than or equal to the full amount
-            if (newPayment > store.getFullAmount() || calculateTotalPaymentsByStore(storeId) >= store.getFullAmount()) {
+            if (newPayment > store.getFullAmount() || calculateTotalPaymentsByStore(saleStoreId) >= store.getFullAmount()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
             }
 
@@ -67,8 +67,8 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public ResponseEntity<Payment> updatePayment(Long storeId, Long paymentId, Long newPayment) {
-        Optional<SaleStore> storeOptional = storeRepository.findById(storeId);
+    public ResponseEntity<Payment> updatePayment(Long saleStoreId, Long paymentId, Long newPayment) {
+        Optional<SaleStore> storeOptional = storeRepository.findById(saleStoreId    );
 
         if (storeOptional.isPresent()) {
             SaleStore store = storeOptional.get();

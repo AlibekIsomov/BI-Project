@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/monthlySalary")
-public class MonthlySalaryController {
+public class    MonthlySalaryController {
     @Autowired
     MonthlySalaryService monthlySalaryService;
     @Autowired
