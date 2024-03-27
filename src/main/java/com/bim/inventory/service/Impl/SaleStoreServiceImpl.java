@@ -4,6 +4,7 @@ import com.bim.inventory.dto.SaleStoreDTO;
 import com.bim.inventory.entity.SaleStore;
 import com.bim.inventory.entity.Store;
 import com.bim.inventory.repository.PaymentRepository;
+import com.bim.inventory.repository.RentStoreRepository;
 import com.bim.inventory.repository.SaleStoreRepository;
 import com.bim.inventory.repository.StoreRepository;
 import com.bim.inventory.service.SaleStoreService;
@@ -28,6 +29,9 @@ public class SaleStoreServiceImpl implements SaleStoreService {
 
     @Autowired
     PaymentRepository paymentRepository;
+
+    @Autowired
+    RentStoreRepository rentStoreRepository;
 
     @Autowired
     StoreRepository storeRepository;
@@ -56,6 +60,12 @@ public class SaleStoreServiceImpl implements SaleStoreService {
             logger.info("Such ID category does not exist!");
         }
 
+        boolean rentStoreExists = rentStoreRepository.existsByStoreId(data.getStoreId());
+        boolean salStoreExists = saleStoreRepository.existsByStoreId(data.getStoreId());
+        if (rentStoreExists || salStoreExists) {
+            logger.info("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+            throw new RentStoreServiceImpl.StoreConflictException("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+        }
 
         SaleStore saleStore = new SaleStore();
         saleStore.setFullAmount(data.getFullAmount());
@@ -63,6 +73,12 @@ public class SaleStoreServiceImpl implements SaleStoreService {
         saleStore.setStore(optionalStore.get());
 
         return Optional.of(saleStoreRepository.save(saleStore));
+    }
+
+    public class StoreConflictException extends RuntimeException {
+        public StoreConflictException(String message) {
+            super(message);
+        }
     }
 
     @Override
@@ -84,12 +100,28 @@ public class SaleStoreServiceImpl implements SaleStoreService {
 
         SaleStore saleStoreToUpdate = existingStore.get();
 
+        if (!saleStoreToUpdate.getStore().getId().equals(data.getStoreId())) {
+            // Check if a RentStore already exists with the new store ID
+            boolean rentStoreExists = rentStoreRepository.existsByStoreId(data.getStoreId());
+            boolean salStoreExists = saleStoreRepository.existsByStoreId(data.getStoreId());
+            if (rentStoreExists || salStoreExists) {
+                logger.info("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+
+                throw new RentStoreServiceImpl.StoreConflictException("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+            }
+        }
+
         saleStoreToUpdate.setFullAmount(data.getFullAmount());
         saleStoreToUpdate.setInitialPayment(data.getInitialPayment());
         saleStoreToUpdate.setStore(optionalStore.get());
 
 
         return Optional.of(saleStoreRepository.save(saleStoreToUpdate));
+    }
+
+    @Override
+    public List<SaleStore> getAllSaleStoresByStoreId(Long storeId) {
+        return saleStoreRepository.findByStoreId(storeId);
     }
 
     @Override

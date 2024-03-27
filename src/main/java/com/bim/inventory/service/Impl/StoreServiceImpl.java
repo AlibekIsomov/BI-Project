@@ -40,11 +40,24 @@ public class StoreServiceImpl implements StoreService {
     FileRepository fileRepository;
 
 
-
     @Override
-    public Page<Store> getAll(Pageable pageable) throws Exception {
-        return storeRepository.findAll(pageable);
+    public List<Store> getAll(Pageable pageable) throws Exception {
+        List<Store> stores = storeRepository.findAll();
+//        List<SaleStore> saleStores = saleStoreRepository.findByStoreId(store.getId());
+
+        for (Store store : stores) {
+            // paidni tekshirish !
+            if (!saleStoreRepository.existsByStoreId(store.getId()) && !rentStoreRepository.existsByStoreId(store.getId())) {
+                store.setConnected(false);
+            } else {
+                store.setConnected(true);
+            }
+
+
+        }
+            return stores;
     }
+
 
     @Override
     public Optional<Store> getById(Long id) throws Exception {
@@ -155,6 +168,17 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public boolean isStoreConnected(Long storeId) {
         return saleStoreRepository.existsByStoreId(storeId) || rentStoreRepository.existsByStoreId(storeId);
+    }
+
+    @Override
+    public boolean isEveryStoreConnected() {
+        List<Store> stores = storeRepository.findAll();
+        for (Store store : stores) {
+            if (!saleStoreRepository.existsByStoreId(store.getId()) && !rentStoreRepository.existsByStoreId(store.getId())) {
+                return false; // If any store does not have either SaleStore or RentStore, return false
+            }
+        }
+        return true; // All stores have either SaleStore or RentStore
     }
 
 

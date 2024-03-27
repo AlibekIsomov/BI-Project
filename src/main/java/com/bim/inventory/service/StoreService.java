@@ -14,7 +14,9 @@ public interface StoreService {
 
     Optional<Store> create(StoreDTO data) throws Exception;
 
-    Page<Store> getAll(Pageable pageable) throws Exception;
+;
+
+    List<Store> getAll(Pageable pageable) throws Exception;
 
     Optional<Store> getById(Long id) throws Exception;
 
@@ -28,6 +30,8 @@ public interface StoreService {
     List<Store> findItemsWithinDateRange(Instant startDate, Instant endDate);
 
     boolean isStoreConnected(Long storeId);
+
+    boolean isEveryStoreConnected();
 
 //    List<Store> getByFullAmount(int fullAmount);
 

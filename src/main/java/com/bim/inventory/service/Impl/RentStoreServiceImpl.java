@@ -4,6 +4,7 @@ import com.bim.inventory.dto.RentStoreDTO;
 import com.bim.inventory.entity.RentStore;
 import com.bim.inventory.entity.Store;
 import com.bim.inventory.repository.RentStoreRepository;
+import com.bim.inventory.repository.SaleStoreRepository;
 import com.bim.inventory.repository.StoreRepository;
 import com.bim.inventory.service.RentStoreService;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -25,9 +28,10 @@ public class RentStoreServiceImpl implements RentStoreService {
     RentStoreRepository rentStoreRepository;
 
     @Autowired
+    SaleStoreRepository saleStoreRepository;
+
+    @Autowired
     StoreRepository storeRepository;
-
-
 
     @Override
     public Page<RentStore> getAll(Pageable pageable) throws Exception {
@@ -53,6 +57,13 @@ public class RentStoreServiceImpl implements RentStoreService {
             logger.info("Such ID category does not exist!");
         }
 
+        boolean rentStoreExists = rentStoreRepository.existsByStoreId(data.getStoreId());
+        boolean salStoreExists = saleStoreRepository.existsByStoreId(data.getStoreId());
+        if (rentStoreExists || salStoreExists) {
+            logger.info("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+            throw new StoreConflictException("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+        }
+
         RentStore rentStore = new RentStore();
         rentStore.setPaymentAmount(data.getPaymentAmount());
         rentStore.setExpiryMonth(data.getExpiryMonth());
@@ -65,7 +76,6 @@ public class RentStoreServiceImpl implements RentStoreService {
     public Optional<RentStore> update(Long id, RentStoreDTO data) throws Exception {
 
         Optional<Store> optionalStore = storeRepository.findById(data.getStoreId());
-
 
         Optional<RentStore> existingStore = rentStoreRepository.findById(id);
 
@@ -80,6 +90,15 @@ public class RentStoreServiceImpl implements RentStoreService {
 
         RentStore rentStoreToUpdate = existingStore.get();
 
+        if (!rentStoreToUpdate.getStore().getId().equals(data.getStoreId())) {
+            // Check if a RentStore already exists with the new store ID
+            boolean rentStoreExists = rentStoreRepository.existsByStoreId(data.getStoreId());
+            boolean salStoreExists = saleStoreRepository.existsByStoreId(data.getStoreId());
+            if (rentStoreExists || salStoreExists) {
+                logger.info("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+                throw new StoreConflictException("RentStore or SaleStore already exists for the store with ID " + data.getStoreId());
+            }
+        }
         rentStoreToUpdate.setPaymentAmount(data.getPaymentAmount());
         rentStoreToUpdate.setExpiryMonth(data.getExpiryMonth());
         rentStoreToUpdate.setStore(optionalStore.get());
@@ -87,6 +106,16 @@ public class RentStoreServiceImpl implements RentStoreService {
 
 
         return Optional.of(rentStoreRepository.save(rentStoreToUpdate));
+    }
+
+    public static class StoreConflictException extends RuntimeException {
+        public StoreConflictException(String message) {
+            super(message);
+        }
+    }
+    @Override
+    public List<RentStore> getAllRentStoresByStoreId(Long storeId) {
+        return rentStoreRepository.findByStoreId(storeId);
     }
 
     @Override

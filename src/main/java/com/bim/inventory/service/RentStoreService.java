@@ -18,6 +18,8 @@ public interface RentStoreService {
 
     Optional<RentStore> update(Long id, RentStoreDTO data) throws Exception;
 
+    List<RentStore> getAllRentStoresByStoreId(Long storeId);
+
     void deleteById(Long id);
 
     List<RentStore> findItemsWithinDateRange(Instant startDate, Instant endDate);

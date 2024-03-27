@@ -18,6 +18,8 @@ public interface SaleStoreService {
 
     Optional<SaleStore> update(Long id, SaleStoreDTO data) throws Exception;
 
+    List<SaleStore> getAllSaleStoresByStoreId(Long storeId);
+
     void deleteById(Long id);
 
     List<SaleStore> findItemsWithinDateRange(Instant startDate, Instant endDate);

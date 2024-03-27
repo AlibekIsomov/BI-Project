@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -49,6 +50,12 @@ public class SaleStoreController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/by-store/{storeId}")
+    public ResponseEntity<List<SaleStore>> getAllSaleStoresByStoreId(@PathVariable Long storeId) {
+        List<SaleStore> saleStores = saleStoreService.getAllSaleStoresByStoreId(storeId);
+        return ResponseEntity.ok(saleStores);
     }
 
     @PutMapping("/{id}")

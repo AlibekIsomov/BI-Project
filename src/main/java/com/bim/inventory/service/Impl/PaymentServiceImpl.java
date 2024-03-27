@@ -101,7 +101,6 @@ public class PaymentServiceImpl implements PaymentService {
     public double calculateTotalPaymentsByStore(Long saleStoreId){
         SaleStore saleStore = storeRepository.findById(saleStoreId)
                 .orElseThrow(() -> new EntityNotFoundException("Store not found with id: " + saleStoreId));
-
         return paymentRepository.calculateTotalPaymentsByStore(saleStore);
     }
 
@@ -125,9 +124,6 @@ public class PaymentServiceImpl implements PaymentService {
             // Delete the payment from the database
             paymentRepository.delete(paymentToDelete);
         } else {
-            // Handle the case where the payment with the given id is not found
-            // You can throw an exception, log a message, or handle it in another way.
-            // For simplicity, I'll log a message.
             System.out.println("Payment with id " + paymentId + " not found");
         }
     }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -27,8 +28,13 @@ public class StoreController {
 
     @Transactional
     @GetMapping
-    public ResponseEntity<Page<Store>> getAll(Pageable pageable) throws Exception {
-        return ResponseEntity.ok(storeService.getAll(pageable));
+    public List<Store> getAllStores(Pageable pageable) {
+        try {
+            return storeService.getAll(pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Transactional
@@ -71,15 +77,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.getAllByStoreNumberContains(storeNumber, pageable));
     }
 
-    @GetMapping("/{storeId}/checkConnection")
-    public ResponseEntity<String> checkStoreConnection(@PathVariable Long storeId) {
-        boolean isConnected = storeService.isStoreConnected(storeId);
-        if (isConnected) {
-            return ResponseEntity.ok("Store is connected to either SaleStore or RentStore");
-        } else {
-            return ResponseEntity.ok("Store is not connected to either SaleStore or RentStore");
-        }
-    }
+
 
 
 }

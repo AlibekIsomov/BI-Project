@@ -16,5 +16,6 @@ public interface RentStoreRepository extends JpaRepository<RentStore , Long> {
 
     Iterable<? extends RentStore> findAllByStoreId(Long id);
 
+    List<RentStore> findByStoreId(Long storeId);
     boolean existsByStoreId(Long storeId);
 }

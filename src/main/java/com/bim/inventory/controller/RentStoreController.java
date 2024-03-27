@@ -57,6 +57,12 @@ public class RentStoreController {
         }
     }
 
+    @GetMapping("/by-store/{storeId}")
+    public ResponseEntity<List<RentStore>> getAllRentStoresByStoreId(@PathVariable Long storeId) {
+        List<RentStore> rentStores = rentStoreService.getAllRentStoresByStoreId(storeId);
+        return ResponseEntity.ok(rentStores);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<RentStore> update(@PathVariable Long id, @RequestBody RentStoreDTO data) {
         try {
