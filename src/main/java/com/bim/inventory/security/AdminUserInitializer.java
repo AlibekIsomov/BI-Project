@@ -6,11 +6,14 @@ import com.bim.inventory.entity.User;
 import com.bim.inventory.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.Set;
+
 
 @Component
 public class AdminUserInitializer implements CommandLineRunner {
