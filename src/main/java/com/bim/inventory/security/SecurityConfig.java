@@ -140,7 +140,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.addAllowedOrigin("http://localhost:5502");
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("https://dashboard-bimhouse.uz");
-        config.addAllowedOrigin("http://192.168.43.144:4200");
+        config.addAllowedOrigin("http://185.250.44.186");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
