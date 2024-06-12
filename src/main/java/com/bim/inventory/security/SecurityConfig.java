@@ -143,6 +143,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.addAllowedOrigin("http://185.250.44.186");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+        config.addAllowedOrigin("https://api.dashboard-bimhouse.uz");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
 
